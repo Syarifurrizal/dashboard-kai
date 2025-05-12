@@ -23,38 +23,38 @@ export const metadata: Metadata = {
   },
   description: "Offical Website of Infrastructure Division Regional 6 of PT. Kereta API Indonesia",
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} h-full min-h-screen antialiased`}
       >
-    <SidebarProvider>
-      <AppSidebar />
-      <main className="w-full">
-        <div className="bg-white flex flex-row items-center gap-4 p-2">
-          <SidebarTrigger />
-          <Breadcrumb className="">
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
-              </BreadcrumbItem >
-            </BreadcrumbList >
-          </Breadcrumb >
-        </div >
-        <div>
-          <Separator />
-        </div>
-        <div className="w-full p-4 min-h-screen">
-          {children}
-        </div>
-      </main>
-    </SidebarProvider>
+        <SidebarProvider>
+          <AppSidebar />
+          <main className="flex flex-col min-h-screen w-full">
+            {/* Header Section */}
+            <div className="bg-white flex flex-row items-center gap-4 p-2">
+              <SidebarTrigger />
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+            </div>
+            <Separator />
+
+            {/* Main Content */}
+            <div className="flex-1 p-4">
+              {children}
+            </div>
+          </main>
+        </SidebarProvider>
       </body>
     </html>
   );
