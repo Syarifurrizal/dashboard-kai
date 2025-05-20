@@ -10,7 +10,7 @@ export default function Page() {
     useEffect(() => {
       async function fetchData() {
         try {
-            const range = 'PERAWATAN KDT SLO!AC3:AO16';
+            const range = 'KDT SLO 2025!A3:F16';
             const res = await fetch(`/api?range=${encodeURIComponent(range)}`);
             const data = await res.json();
         
