@@ -22,32 +22,37 @@ import Image from "next/image"
 import Logo from "@/public/KAI.svg"
 import { SidebarDropdown } from "./SidebarDropdown"
 
-const kdg = [
-
-  { title: "Availability", url: "/kdg/availability", icon: ShieldCheck },
-  { title: "Perawatan", url: "/kdg/perawatan", icon: Wrench },
-  { title: "Saldo Gudang", url: "/kdg/saldogudang", icon: BadgeDollarSign },
-  { title: "Balance Movement", url: "/kdg/balancemovement", icon: ChartCandlestick },
-  { title: "Gangguan", url: "/kdg/gangguan", icon: ShieldAlert },
-]
-
 const kdk = [
 
   { title: "Availability", url: "/kdk/availability", icon: ShieldCheck },
   { title: "Perawatan", url: "/kdk/perawatan", icon: Wrench },
-  { title: "Saldo Gudang", url: "/kdk/saldogudang", icon: BadgeDollarSign },
-  { title: "Balance Movement", url: "/kdk/balancemovement", icon: ChartCandlestick },
+  { title: "Saldo Gudang YK", url: "/kdk/saldogudangyk", icon: BadgeDollarSign },
+  { title: "Saldo Gudang SLO", url: "/kdk/saldogudangslo", icon: BadgeDollarSign },
+  { title: "Balance Movement YK", url: "/kdk/balancemovementyk", icon: ChartCandlestick },
+  { title: "Balance Movement SLO", url: "/kdk/balancemovementslo", icon: ChartCandlestick },
   { title: "Gangguan", url: "/kdk/gangguan", icon: ShieldAlert },
 ]
 
-const kdt = [
+// const kdg = [
 
-  { title: "Availability", url: "/kdt/availability", icon: ShieldCheck },
-  { title: "Perawatan", url: "/kdt/perawatan", icon: Wrench },
-  { title: "Saldo Gudang", url: "/kdt/saldogudang", icon: BadgeDollarSign },
-  { title: "Balance Movement", url: "/kdt/balancemovement", icon: ChartCandlestick },
-  { title: "Gangguan", url: "/kdt/gangguan", icon: ShieldAlert },
-]
+//   { title: "Availability", url: "/kdg/availability", icon: ShieldCheck },
+//   { title: "Perawatan", url: "/kdg/perawatan", icon: Wrench },
+//   { title: "Saldo Gudang", url: "/kdg/saldogudang", icon: BadgeDollarSign },
+//   { title: "Balance Movement", url: "/kdg/balancemovement", icon: ChartCandlestick },
+//   { title: "Gangguan", url: "/kdg/gangguan", icon: ShieldAlert },
+// ]
+
+// const kdt = [
+
+//   { title: "Availability", url: "/kdt/availability", icon: ShieldCheck },
+//   { title: "Perawatan", url: "/kdt/perawatan", icon: Wrench },
+//   { title: "Saldo Gudang YK", url: "/kdt/saldogudangyk", icon: BadgeDollarSign },
+//   { title: "Balance Movement YK", url: "/kdt/balancemovementyk", icon: ChartCandlestick },
+//   { title: "Saldo Gudang SLO", url: "/kdt/saldogudangslo", icon: BadgeDollarSign },
+//   { title: "Balance Movement SLO", url: "/kdt/balancemovementslo", icon: ChartCandlestick },
+//   { title: "Gangguan", url: "/kdt/gangguan", icon: ShieldAlert },
+//   { title: "Gangguan krd", url: "/kdt/gangguankrd", icon: ShieldAlert },
+// ]
 
 export function AppSidebar() {
   return (
@@ -64,9 +69,9 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
 
-            <SidebarDropdown label="KDK" items={kdk} />
-            <SidebarDropdown label="KDT" items={kdt} />
-            <SidebarDropdown label="KDG" items={kdg} />
+              <SidebarDropdown label="KDK" items={kdk} />
+              {/* <SidebarDropdown label="KDT" items={kdt} />
+              <SidebarDropdown label="KDG" items={kdg} /> */}
 
             </SidebarMenu>
           </SidebarGroupContent>
