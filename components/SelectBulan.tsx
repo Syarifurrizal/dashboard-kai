@@ -37,14 +37,24 @@ export default function SelectBulan({ data, value, onChange }: Props) {
             label: label.charAt(0).toUpperCase() + label.slice(1),
         }));
 
-        options.sort((a, b) => new Date("1 " + a.value).getTime() - new Date("1 " + b.value).getTime());
+        options.sort(
+            (a, b) =>
+                new Date("1 " + a.value).getTime() - new Date("1 " + b.value).getTime()
+        );
 
-        setMonthOptions(options);
-    }, [data]);
+        // Add "Januari - Sekarang" option at the top
+        const allOption = { value: "all", label: "Januari - Sekarang" };
+        setMonthOptions([allOption, ...options]);
+
+        // If no value is set yet, trigger onChange with default
+        if (!value && onChange) {
+            onChange(allOption.value);
+        }
+    }, [data, value, onChange]);
 
     return (
         <Select
-            value={value}
+            value={value || "All"}
             onValueChange={(val) => {
                 onChange?.(val);
             }}
