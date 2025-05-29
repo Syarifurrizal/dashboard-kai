@@ -28,12 +28,6 @@ export default function Page() {
                 const json: SaldoGudang[] = await res.json();
 
                 setData(json);
-
-                const currentMonth = dateToIDString(new Date());
-                const availableMonths = new Set(json.map(item => dateToIDString(new Date(item.realDate))));
-                if (availableMonths.has(currentMonth)) {
-                    setSelectedMonth(currentMonth);
-                }
             } catch (err) {
                 if (err instanceof Error) {
                     setError(err.message);
