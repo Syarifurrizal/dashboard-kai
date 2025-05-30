@@ -38,13 +38,17 @@ export interface Gangguan {
 export interface Perawatan {
     bulan: string;
     p1: number;
-    rp1: number
+    rp1: number;
+    persen_1: number;
     p3: number;
     rp3: number
+    persen_3: number;
     p6: number;
     rp6: number
+    persen_6: number;
     p12: number;
-    rp12: number
+    rp12: number;
+    persen_12: number;
 }
 
 export interface SaldoGudang {

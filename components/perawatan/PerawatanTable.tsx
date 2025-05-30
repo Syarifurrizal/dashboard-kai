@@ -22,15 +22,19 @@ export default function PerawatanTable({ data }: Props) {
                     </TableCaption>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-[200px]">Bulan</TableHead>
+                            <TableHead>Bulan</TableHead>
                             <TableHead>P 1</TableHead>
                             <TableHead>RP 1</TableHead>
+                            <TableHead>% 1</TableHead>
                             <TableHead>P 3</TableHead>
                             <TableHead>RP 3</TableHead>
+                            <TableHead>% 3</TableHead>
                             <TableHead>P 6</TableHead>
                             <TableHead>RP 6</TableHead>
+                            <TableHead>% 6</TableHead>
                             <TableHead>P 12</TableHead>
                             <TableHead>RP 12</TableHead>
+                            <TableHead>% 12</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -40,12 +44,16 @@ export default function PerawatanTable({ data }: Props) {
                                     <TableCell>{capitalizeFirstLetter(row.bulan)}</TableCell>
                                     <TableCell>{row.p1}</TableCell>
                                     <TableCell>{row.rp1}</TableCell>
+                                    <TableCell>{row.persen_1.toFixed(0)} %</TableCell>
                                     <TableCell>{row.p3}</TableCell>
                                     <TableCell>{row.rp3}</TableCell>
+                                    <TableCell>{row.persen_3.toFixed(0)} %</TableCell>
                                     <TableCell>{row.p6}</TableCell>
                                     <TableCell>{row.rp6}</TableCell>
+                                    <TableCell>{row.persen_6.toFixed(0)} %</TableCell>
                                     <TableCell>{row.p12}</TableCell>
                                     <TableCell>{row.rp12}</TableCell>
+                                    <TableCell>{row.persen_12.toFixed(0)} %</TableCell>
                                 </TableRow>
                             ))
                         }

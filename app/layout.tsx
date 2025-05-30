@@ -23,6 +23,7 @@ export const metadata: Metadata = {
   },
   description: "Offical Website of Infrastructure Division Regional 6 of PT. Kereta API Indonesia",
 };
+
 export default function RootLayout({
   children,
 }: Readonly<{
