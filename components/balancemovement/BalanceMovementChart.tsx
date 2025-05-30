@@ -6,7 +6,7 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "../ui/chart";
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import { formatSaldoBesar } from "@/lib/utils";
 
 interface Props {
@@ -36,27 +36,29 @@ export default function BalanceMovementChart({ data }: Props) {
 
     return (
         <>
-            <Card >
+            <Card>
                 <CardHeader>
                     <CardTitle>Saldo Gudang</CardTitle>
                     <CardDescription>Januari - Desember</CardDescription>
                 </CardHeader>
                 <CardContent >
-                    <ChartContainer config={chartConfig} className="max-h-[450px] w-full">
-                        <BarChart accessibilityLayer data={data}>
+                    <ChartContainer className="max-h-110 w-full" config={chartConfig}>
+                        <AreaChart
+                            accessibilityLayer
+                            data={data}
+                            margin={{
+                                left: 12,
+                                right: 12,
+                            }}
+                        >
                             <CartesianGrid vertical={false} />
                             <XAxis
                                 dataKey="bulan"
                                 tickLine={true}
-                                tickMargin={10}
-                                axisLine={false}
+                                axisLine={true}
+                                tickMargin={8}
                                 tickFormatter={(value) => value.slice(0, 3)}
                             />
-                            <ChartTooltip
-                                cursor={true}
-                                content={<ChartTooltipContent indicator="line" />}
-                            />
-                            <ChartLegend content={<ChartLegendContent />} />
                             <YAxis
                                 tickLine={true}
                                 axisLine={true}
@@ -64,11 +66,111 @@ export default function BalanceMovementChart({ data }: Props) {
                                 tickCount={8}
                                 tickFormatter={(value) => formatSaldoBesar(Number(value), 1)}
                             />
-                            <Bar dataKey="awal" fill="var(--color-awal)" radius={4} />
-                            <Bar dataKey="terima" fill="var(--color-terima)" radius={4} />
-                            <Bar dataKey="pakai" fill="var(--color-pakai)" radius={4} />
-                            <Bar dataKey="saldo" fill="var(--color-saldo)" radius={4} />
-                        </BarChart>
+                            <ChartTooltip cursor={true} content={<ChartTooltipContent />} />
+                            <ChartLegend content={<ChartLegendContent />} />
+                            <defs>
+                                <linearGradient id="fillAwal" x1="0" y1="0" x2="0" y2="1">
+                                    <stop
+                                        offset="5%"
+                                        stopColor="hsl(var(--chart-blue))"
+                                        stopOpacity={0.8}
+                                    />
+                                    <stop
+                                        offset="95%"
+                                        stopColor="hsl(var(--chart-blue))"
+                                        stopOpacity={0.1}
+                                    />
+                                </linearGradient>
+                                <linearGradient id="fillTerima" x1="0" y1="0" x2="0" y2="1">
+                                    <stop
+                                        offset="5%"
+                                        stopColor="hsl(var(--chart-green))"
+                                        stopOpacity={0.8}
+                                    />
+                                    <stop
+                                        offset="95%"
+                                        stopColor="hsl(var(--chart-green))"
+                                        stopOpacity={0.1}
+                                    />
+                                </linearGradient>
+                                <linearGradient id="fillPakai" x1="0" y1="0" x2="0" y2="1">
+                                    <stop
+                                        offset="5%"
+                                        stopColor="hsl(var(--chart-red))"
+                                        stopOpacity={0.8}
+                                    />
+                                    <stop
+                                        offset="95%"
+                                        stopColor="hsl(var(--chart-red))"
+                                        stopOpacity={0.1}
+                                    />
+                                </linearGradient>
+                                <linearGradient id="fillSaldo" x1="0" y1="0" x2="0" y2="1">
+                                    <stop
+                                        offset="5%"
+                                        stopColor="hsl(var(--chart-yellow))"
+                                        stopOpacity={0.8}
+                                    />
+                                    <stop
+                                        offset="95%"
+                                        stopColor="hsl(var(--chart-yellow))"
+                                        stopOpacity={0.1}
+                                    />
+                                </linearGradient>
+                            </defs>
+                            <Area
+                                dataKey="awal"
+                                type="natural"
+                                fill="url(#fillAwal)"
+                                fillOpacity={0.4}
+                                stroke="var(--color-awal)"
+                                dot={{
+                                    fill: "var(--color-awal)",
+                                }}
+                                activeDot={{
+                                    r: 6,
+                                }}
+                            />
+                            <Area
+                                dataKey="terima"
+                                type="natural"
+                                fill="url(#fillTerima)"
+                                fillOpacity={0.4}
+                                stroke="var(--color-terima)"
+                                dot={{
+                                    fill: "var(--color-terima)",
+                                }}
+                                activeDot={{
+                                    r: 6,
+                                }}
+                            />
+                            <Area
+                                dataKey="pakai"
+                                type="natural"
+                                fill="url(#fillPakai)"
+                                fillOpacity={0.4}
+                                stroke="var(--color-pakai)"
+                                dot={{
+                                    fill: "var(--color-pakai)",
+                                }}
+                                activeDot={{
+                                    r: 6,
+                                }}
+                            />
+                            <Area
+                                dataKey="saldo"
+                                type="natural"
+                                fill="url(#fillSaldo)"
+                                fillOpacity={0.4}
+                                stroke="var(--color-saldo)"
+                                dot={{
+                                    fill: "var(--color-saldo)",
+                                }}
+                                activeDot={{
+                                    r: 6,
+                                }}
+                            />
+                        </AreaChart>
                     </ChartContainer>
                 </CardContent>
             </Card>

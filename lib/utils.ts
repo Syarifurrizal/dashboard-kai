@@ -28,6 +28,12 @@ export function toInt(input: string): number {
   return isNaN(result) ? 0 : result
 }
 
+export function countPercentage(...args: [number, number]): number {
+  const [total, part] = args;
+  if (total === 0) return 0;
+  return (part / total) * 100;
+}
+
 export function formatSaldoBesar(amount: number, precision: number = 0, useComma: boolean = true): string {
   let value: number;
   let suffix: string = "";
@@ -208,18 +214,31 @@ export function mergeAndCalculatePerawatan(
     const key = `${item.bulan}`;
     const existing = mergedMap.get(key);
 
+
     if (existing) {
-      // Sum all numeric fields
+      const sumP1 = existing.p1 + item.p1;
+      const sumRp1 = existing.rp1 + item.rp1;
+      const sumP3 = existing.p3 + item.p3;
+      const sumRp3 = existing.rp3 + item.rp3;
+      const sumP6 = existing.p6 + item.p6;
+      const sumRp6 = existing.rp6 + item.rp6;
+      const sumP12 = existing.p12 + item.p12;
+      const sumRp12 = existing.rp12 + item.rp12;
+
       const summed: Perawatan = {
         bulan: item.bulan,
-        p1: existing.p1 + item.p1,
-        rp1: existing.rp1 + item.rp1,
-        p3: existing.p3 + item.p3,
-        rp3: existing.rp3 + item.rp3,
-        p6: existing.p6 + item.p6,
-        rp6: existing.rp6 + item.rp6,
-        p12: existing.p12 + item.p12,
-        rp12: existing.rp12 + item.rp12,
+        p1: sumP1,
+        rp1: sumRp1,
+        persen_1: countPercentage(sumP1, sumRp1),
+        p3: sumP3,
+        rp3: sumRp3,
+        persen_3: countPercentage(sumP3, sumRp3),
+        p6: sumP6,
+        rp6: sumRp6,
+        persen_6: countPercentage(sumP6, sumRp6),
+        p12: sumP12,
+        rp12: sumRp12,
+        persen_12: countPercentage(sumP12, sumRp12),
       };
 
       mergedMap.set(key, summed);

@@ -28,35 +28,35 @@ import { SidebarDropdown } from "./SidebarDropdown"
 const kdk = [
 
   { title: "Availability", url: "/kdk/availability", icon: ShieldCheck },
-  { title: "Perawatan", url: "/kdk/perawatan", icon: Wrench },
   // { title: "Saldo Gudang YK", url: "/kdk/saldogudangyk", icon: BadgeDollarSign },
   // { title: "Saldo Gudang SLO", url: "/kdk/saldogudangslo", icon: BadgeDollarSign },
   // { title: "Balance Movement YK", url: "/kdk/balancemovementyk", icon: ChartCandlestick },
   // { title: "Balance Movement SLO", url: "/kdk/balancemovementslo", icon: ChartCandlestick },
-  { title: "Saldo Gudang", url: "/kdk/saldogudang", icon: BadgeDollarSign },
   { title: "Balance Movement", url: "/kdk/balancemovement", icon: ChartCandlestick },
   { title: "Gangguan", url: "/kdk/gangguan", icon: ShieldAlert },
+  { title: "Perawatan", url: "/kdk/perawatan", icon: Wrench },
+  { title: "Saldo Gudang", url: "/kdk/saldogudang", icon: BadgeDollarSign },
 ]
 
 const kdg = [
 
   { title: "Availability", url: "/kdg/availability", icon: ShieldCheck },
-  { title: "Perawatan", url: "/kdg/perawatan", icon: Wrench },
-  { title: "Saldo Gudang", url: "/kdg/saldogudang", icon: BadgeDollarSign },
   { title: "Balance Movement", url: "/kdg/balancemovement", icon: ChartCandlestick },
   { title: "Gangguan", url: "/kdg/gangguan", icon: ShieldAlert },
+  { title: "Perawatan", url: "/kdg/perawatan", icon: Wrench },
+  { title: "Saldo Gudang", url: "/kdg/saldogudang", icon: BadgeDollarSign },
 ]
 
 const kdt = [
 
   { title: "Availability", url: "/kdt/availability", icon: ShieldCheck },
-  { title: "Perawatan", url: "/kdt/perawatan", icon: Wrench },
-  { title: "Saldo Gudang YK", url: "/kdt/saldogudangyk", icon: BadgeDollarSign },
-  { title: "Balance Movement YK", url: "/kdt/balancemovementyk", icon: ChartCandlestick },
-  { title: "Saldo Gudang SLO", url: "/kdt/saldogudangslo", icon: BadgeDollarSign },
   { title: "Balance Movement SLO", url: "/kdt/balancemovementslo", icon: ChartCandlestick },
+  { title: "Balance Movement YK", url: "/kdt/balancemovementyk", icon: ChartCandlestick },
   { title: "Gangguan", url: "/kdt/gangguan", icon: ShieldAlert },
   { title: "Gangguan KRD", url: "/kdt/gangguankrd", icon: ShieldAlert },
+  { title: "Perawatan", url: "/kdt/perawatan", icon: Wrench },
+  { title: "Saldo Gudang SLO", url: "/kdt/saldogudangslo", icon: BadgeDollarSign },
+  { title: "Saldo Gudang YK", url: "/kdt/saldogudangyk", icon: BadgeDollarSign },
 ]
 
 export function AppSidebar() {
@@ -74,15 +74,13 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
 
-              <Link href="sarana" className="flex items-center gap-2">
-                <SidebarGroupLabel>Sarana</SidebarGroupLabel>
-              </Link>
+              <SidebarGroupLabel>Sarana</SidebarGroupLabel>
               <SidebarDropdown label="KDK" items={kdk} />
               <SidebarDropdown label="KDT" items={kdt} />
               <SidebarDropdown label="KDG" items={kdg} />
-              <Link href="jabatan" className="flex items-center gap-2 pt-4">
+              <div className="flex items-center gap-2 pt-4">
                 <SidebarGroupLabel>Jabatan</SidebarGroupLabel>
-              </Link>
+              </div>
 
             </SidebarMenu>
           </SidebarGroupContent>

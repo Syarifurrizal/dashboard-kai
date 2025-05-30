@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 
 import { Availability } from "@/lib/definitions";
@@ -62,7 +63,7 @@ export default function Page() {
                 <h1 className="font-bold text-2xl">Availability KDK</h1>
                 {loading ? (
                     <div className="flex flex-col w-full gap-4">
-                        <div className="flex flex-row w-full gap-4">
+                        <div className="flex flex-col md:flex-row w-full gap-4">
                             <DistribusiChartSkeleton />
                             <DistribusiChartSkeleton />
                             <DistribusiChartSkeleton />
@@ -74,7 +75,7 @@ export default function Page() {
                     </div>
                 ) : (
                     <div className="flex flex-col w-full gap-4">
-                        <div className="flex flex-row w-full gap-4">
+                        <div className="flex flex-col md:flex-row w-full gap-4">
                             <DistribusiChart chartData={data} chartKey="sf" label="Distribusi SF" />
                             <DistribusiChart chartData={data} chartKey="so" label="Distribusi SO" />
                             <DistribusiChart chartData={data} chartKey="sgo" label="Distribusi SGO" />

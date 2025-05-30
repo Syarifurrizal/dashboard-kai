@@ -44,6 +44,7 @@ export default function Page() {
     return (
         <>
             <main className="w-full flex flex-col gap-4">
+                <h1 className="font-bold text-2xl">Balance Movement KDK</h1>
                 {loading ? (
                     <div className="flex flex-col w-full gap-4">
                         <BalanceMovementChartSkeleton />
