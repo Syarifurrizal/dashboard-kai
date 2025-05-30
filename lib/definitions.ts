@@ -6,11 +6,12 @@ export interface Availability {
     tso: number;
     so: number;
     sf: number;
-    asistensi: number;
+    kirimAsistensi: number;
+    terimaAsistensi: number;
     cadangan: number;
-    programAvailability: number;
-    availability: number;
-    utilisasi: number;
+    persen_ProgramAvailability: number;
+    persen_Availability: number;
+    persen_Utilisasi: number;
 }
 
 export interface BalanceMovement {

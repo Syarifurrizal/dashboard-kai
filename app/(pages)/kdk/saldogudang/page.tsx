@@ -64,7 +64,7 @@ export default function Page() {
     });
 
     return (
-        <main className="w-full flex flex-col gap-4 p-6">
+        <main className="w-full flex flex-col gap-4">
             <SelectBulan
                 data={data.map(d => d.realDate)}
                 value={selectedMonth}

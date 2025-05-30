@@ -21,18 +21,19 @@ export default function AvailabilityTable({ data }: Props) {
                     </TableCaption>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-[200px]">Bulan</TableHead>
+                            <TableHead>Bulan</TableHead>
                             <TableHead>Armada</TableHead>
                             <TableHead>TSGO</TableHead>
                             <TableHead>SGO</TableHead>
                             <TableHead>TSO</TableHead>
                             <TableHead>SO</TableHead>
                             <TableHead>SF</TableHead>
-                            <TableHead>Asistensi</TableHead>
+                            <TableHead>Kirim Asistensi</TableHead>
+                            <TableHead>Terima Asistensi</TableHead>
                             <TableHead>Cadangan</TableHead>
-                            <TableHead>Program Availability</TableHead>
-                            <TableHead>Availability</TableHead>
-                            <TableHead>Utilisasi</TableHead>
+                            <TableHead>% Program Availability</TableHead>
+                            <TableHead>% Availability</TableHead>
+                            <TableHead>% Utilisasi</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -46,11 +47,12 @@ export default function AvailabilityTable({ data }: Props) {
                                     <TableCell>{row.tso}</TableCell>
                                     <TableCell>{row.so}</TableCell>
                                     <TableCell>{row.sf}</TableCell>
-                                    <TableCell>{row.asistensi}</TableCell>
+                                    <TableCell>{row.kirimAsistensi}</TableCell>
+                                    <TableCell>{row.terimaAsistensi}</TableCell>
                                     <TableCell>{row.cadangan}</TableCell>
-                                    <TableCell>{isNaN(row.programAvailability) ? "Invalid" : row.programAvailability + " %"}</TableCell>
-                                    <TableCell>{isNaN(row.availability) ? "Invalid" : row.availability + " %"}</TableCell>
-                                    <TableCell>{isNaN(row.utilisasi) ? "Invalid" : row.utilisasi + " %"}</TableCell>
+                                    <TableCell>{isNaN(row.persen_ProgramAvailability) ? "Invalid" : row.persen_ProgramAvailability + " %"}</TableCell>
+                                    <TableCell>{isNaN(row.persen_Availability) ? "Invalid" : row.persen_Availability + " %"}</TableCell>
+                                    <TableCell>{isNaN(row.persen_Utilisasi) ? "Invalid" : row.persen_Utilisasi + " %"}</TableCell>
                                 </TableRow>
                             ))
                         }

@@ -1,9 +1,12 @@
 "use client";
+import PerawatanChart from "@/components/perawatan/PerawatanChart";
+import PerawatanChartSkeleton from "@/components/perawatan/PerawatanChartSkeleton";
 import PerawatanTable from "@/components/perawatan/PerawatanTable";
 import PerawatanTableSkeleton from "@/components/perawatan/PerawatanTableSkeleton";
 import { Perawatan } from "@/lib/definitions";
 import { mergeAndCalculatePerawatan } from "@/lib/utils";
 import { useEffect, useState } from "react";
+
 
 export default function Page() {
 
@@ -53,13 +56,16 @@ export default function Page() {
 
     return (
         <>
-            <main className="w-full flex flex-col gap-4 p-6">
+            <main className="w-full flex flex-col gap-4">
+                <h1 className="font-bold text-2xl">Perawatan KDK</h1>
                 {loading ? (
                     <div className="flex flex-col w-full gap-4">
+                        <PerawatanChartSkeleton />
                         <PerawatanTableSkeleton />
                     </div>
                 ) : (
                     <div className="flex flex-col w-full gap-4">
+                        <PerawatanChart data={data} />
                         <PerawatanTable data={data} />
                     </div>
                 )}

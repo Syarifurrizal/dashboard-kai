@@ -14,6 +14,7 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
+  SidebarGroupLabel,
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import { Separator } from "./ui/separator"
@@ -28,10 +29,12 @@ const kdk = [
 
   { title: "Availability", url: "/kdk/availability", icon: ShieldCheck },
   { title: "Perawatan", url: "/kdk/perawatan", icon: Wrench },
-  { title: "Saldo Gudang YK", url: "/kdk/saldogudangyk", icon: BadgeDollarSign },
-  { title: "Saldo Gudang SLO", url: "/kdk/saldogudangslo", icon: BadgeDollarSign },
-  { title: "Balance Movement YK", url: "/kdk/balancemovementyk", icon: ChartCandlestick },
-  { title: "Balance Movement SLO", url: "/kdk/balancemovementslo", icon: ChartCandlestick },
+  // { title: "Saldo Gudang YK", url: "/kdk/saldogudangyk", icon: BadgeDollarSign },
+  // { title: "Saldo Gudang SLO", url: "/kdk/saldogudangslo", icon: BadgeDollarSign },
+  // { title: "Balance Movement YK", url: "/kdk/balancemovementyk", icon: ChartCandlestick },
+  // { title: "Balance Movement SLO", url: "/kdk/balancemovementslo", icon: ChartCandlestick },
+  { title: "Saldo Gudang", url: "/kdk/saldogudang", icon: BadgeDollarSign },
+  { title: "Balance Movement", url: "/kdk/balancemovement", icon: ChartCandlestick },
   { title: "Gangguan", url: "/kdk/gangguan", icon: ShieldAlert },
 ]
 
@@ -53,7 +56,7 @@ const kdt = [
   { title: "Saldo Gudang SLO", url: "/kdt/saldogudangslo", icon: BadgeDollarSign },
   { title: "Balance Movement SLO", url: "/kdt/balancemovementslo", icon: ChartCandlestick },
   { title: "Gangguan", url: "/kdt/gangguan", icon: ShieldAlert },
-  { title: "Gangguan krd", url: "/kdt/gangguankrd", icon: ShieldAlert },
+  { title: "Gangguan KRD", url: "/kdt/gangguankrd", icon: ShieldAlert },
 ]
 
 export function AppSidebar() {
@@ -72,13 +75,13 @@ export function AppSidebar() {
             <SidebarMenu>
 
               <Link href="sarana" className="flex items-center gap-2">
-                <span>SARANA</span>
+                <SidebarGroupLabel>Sarana</SidebarGroupLabel>
               </Link>
               <SidebarDropdown label="KDK" items={kdk} />
               <SidebarDropdown label="KDT" items={kdt} />
               <SidebarDropdown label="KDG" items={kdg} />
-              <Link href="jabatan" className="flex items-center gap-2">
-                <span>JABATAN</span>
+              <Link href="jabatan" className="flex items-center gap-2 pt-4">
+                <SidebarGroupLabel>Jabatan</SidebarGroupLabel>
               </Link>
 
             </SidebarMenu>
