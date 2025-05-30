@@ -57,19 +57,26 @@ export default function Page() {
 
     const normalize = (s: string) => s.trim().toLowerCase();
 
-    const filteredData = data.filter(d => {
-        const dDate = new Date(d.realDate);
-        const monthName = dateToIDString(dDate);
-        return normalize(monthName) === normalize(selectedMonth);
-    });
+    const filteredData = selectedMonth === "Semua"
+        ? data
+        : data.filter(d => {
+            const dDate = new Date(d.realDate);
+            const monthName = dateToIDString(dDate);
+            return normalize(monthName) === normalize(selectedMonth);
+        });
+
 
     return (
         <main className="w-full flex flex-col gap-4">
-            <SelectBulan
-                data={data.map(d => d.realDate)}
-                value={selectedMonth}
-                onChange={setSelectedMonth}
-            />
+            <h1 className="font-bold text-2xl pb-2">Availability KDK</h1>
+            <div className="flex flex-col gap-2">
+                <h1 className="font-medium text-md">Pilih data:</h1>
+                <SelectBulan
+                    data={data.map(d => d.realDate)}
+                    value={selectedMonth}
+                    onChange={setSelectedMonth}
+                />
+            </div>
 
             {loading ? (
                 <div className="flex flex-col w-full gap-4">

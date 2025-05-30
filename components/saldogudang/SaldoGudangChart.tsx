@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
 
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
-import { formatSaldoBesar } from "@/lib/utils";
+import { formatSaldoBesar, toDate } from "@/lib/utils";
 
 interface Props {
     data: SaldoGudang[];
@@ -46,15 +46,35 @@ export default function SaldoGudangChart({ data, selected }: Props) {
                                 tickLine={true}
                                 tickMargin={10}
                                 axisLine={true}
-                                tickFormatter={(value) => value.slice(0, 3)}
+                                tickFormatter={(value: string) => {
+                                    const date = toDate(value);
+                                    return selected === "Semua"
+                                        ? date.toLocaleString("id-ID", { month: "short" })
+                                        : date.getDate().toString();
+                                }}
+                                ticks={
+                                    selected === "Semua"
+                                        ? Array.from(
+                                            new Map(
+                                                data.map((item) => {
+                                                    const date = toDate(item.tanggal);
+                                                    const key = `${date.getFullYear()}-${date.getMonth()}`;
+                                                    return [key, item.tanggal]; // keep the first tanggal per month
+                                                })
+                                            ).values()
+                                        ).slice(0, 12)
+                                        : undefined
+                                }
                             />
+
+
                             <ChartTooltip
                                 cursor={true}
                                 content={<ChartTooltipContent indicator="line" />}
                             />
                             <YAxis
                                 tickLine={false}
-                                axisLine={false}
+                                axisLine={true}
                                 tickMargin={10}
                                 tickCount={8}
                                 tickFormatter={(value) => formatSaldoBesar(Number(value), 1)}
