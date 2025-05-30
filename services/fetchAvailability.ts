@@ -18,11 +18,12 @@ export async function fetchAvailability(range: string): Promise<Availability[]> 
             tso: toInt(row[4]),
             so: toInt(row[5]),
             sf: toInt(row[6]),
-            asistensi: toInt(row[7]),
+            kirimAsistensi: toInt(row[7]),
+            terimaAsistensi: toInt(row[8]),
             cadangan: toInt(row[9]),
-            programAvailability: 0,
-            availability: 0,
-            utilisasi: 0,
+            persen_ProgramAvailability: 0,
+            persen_Availability: 0,
+            persen_Utilisasi: 0,
         }
     });
 }

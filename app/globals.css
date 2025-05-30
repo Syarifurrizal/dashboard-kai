@@ -68,6 +68,15 @@
   --chart-3: 216 92% 60%;
   --chart-4: 210 98% 78%;
   --chart-5: 212 97% 87%;
+  --chart-6: 218 94% 72%;
+  --chart-red-1: 347 77% 50%;
+  --chart-red-2: 349 77% 62%;
+  --chart-red-3: 350 80% 72%;
+  --chart-red-4: 351 83% 82%;
+  --chart-green-1: 142 88% 28%;
+  --chart-green-2: 139 65% 20%;
+  --chart-green-3: 140 74% 24%;
+  --chart-green-4: 137 55% 15%;
   --chart-blue: 221.2 70% 58%;
   --chart-red: 347 68% 54%;
   --chart-green: 140 68% 50%;
@@ -106,6 +115,7 @@
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
+  --chart-6: 218 94% 72%;
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);

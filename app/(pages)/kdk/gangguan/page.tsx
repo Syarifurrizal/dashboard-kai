@@ -42,7 +42,7 @@ export default function Page() {
     if (error) return <p>Error: {error}</p>;
     return (
         <>
-            <main className="w-full flex flex-col gap-4 p-6">
+            <main className="w-full flex flex-col gap-4">
                 {loading ? (
                     <div className="flex flex-col w-full gap-4">
                         <GangguanChartSkeleton />
