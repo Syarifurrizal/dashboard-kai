@@ -31,7 +31,7 @@ export default function SaldoGudangChart({ data, selected }: Props) {
                     <CardDescription>{selected}</CardDescription>
                 </CardHeader>
                 <CardContent >
-                    <ChartContainer config={chartConfig} className="max-h-[450px] w-full">
+                    <ChartContainer config={chartConfig} className="max-h-[350px] w-full">
                         <AreaChart
                             accessibilityLayer
                             data={data}
