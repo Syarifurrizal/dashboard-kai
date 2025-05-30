@@ -5,6 +5,10 @@ import { Availability } from "@/lib/definitions";
 import AvailabilityTable from "@/components/availability/AvailabilityTable";
 import AvailabilityTableSkeleton from "@/components/availability/AvailabilityTableSkeleton";
 import { mergeAndCalculateAvailability } from "@/lib/utils";
+import DistribusiChart from "@/components/availability/DistribusiChart";
+import { AvailabilityChart } from "@/components/availability/AvailabilityChart";
+import AvailabiltyChartSkeleton from "@/components/availability/AvailabilityChartSkeleton";
+import DistribusiChartSkeleton from "@/components/availability/DistribusiChartSkeleton";
 
 export default function Page() {
 
@@ -54,13 +58,30 @@ export default function Page() {
 
     return (
         <>
-            <main className="w-full flex flex-col gap-4 p-6">
+            <main className="w-full flex flex-col gap-4">
+                <h1 className="font-bold text-2xl">Availability KDK</h1>
                 {loading ? (
                     <div className="flex flex-col w-full gap-4">
+                        <div className="flex flex-row w-full gap-4">
+                            <DistribusiChartSkeleton />
+                            <DistribusiChartSkeleton />
+                            <DistribusiChartSkeleton />
+                            <DistribusiChartSkeleton />
+                            <DistribusiChartSkeleton />
+                        </div>
+                        <AvailabiltyChartSkeleton />
                         <AvailabilityTableSkeleton />
                     </div>
                 ) : (
                     <div className="flex flex-col w-full gap-4">
+                        <div className="flex flex-row w-full gap-4">
+                            <DistribusiChart chartData={data} chartKey="sf" label="Distribusi SF" />
+                            <DistribusiChart chartData={data} chartKey="so" label="Distribusi SO" />
+                            <DistribusiChart chartData={data} chartKey="sgo" label="Distribusi SGO" />
+                            <DistribusiChart chartData={data} chartKey="tso" label="Distribusi TSO" />
+                            <DistribusiChart chartData={data} chartKey="tsgo" label="Distribusi TSGO" />
+                        </div>
+                        <AvailabilityChart chartTitle="Performa Armada" chartData={data} />
                         <AvailabilityTable data={data} />
                     </div>
                 )}

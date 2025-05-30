@@ -43,7 +43,7 @@ export default function SelectBulan({ data, value, onChange }: Props) {
         );
 
         // Add "Januari - Sekarang" option at the top
-        const allOption = { value: "all", label: "Januari - Sekarang" };
+        const allOption = { value: "Semua", label: "Semua" };
         setMonthOptions([allOption, ...options]);
 
         // If no value is set yet, trigger onChange with default

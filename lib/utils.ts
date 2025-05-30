@@ -126,19 +126,19 @@ export function mergeAndCalculateAvailability(
 ): Availability[] {
   const mergedMap = new Map<string, Availability>();
 
-  // First dataset (initialize map)
+  // Initialize map with data1
   for (const item of data1) {
     const key = `${item.bulan}`;
     mergedMap.set(key, { ...item });
   }
 
-  // Second dataset (sum into map)
+  // Merge and sum data2
   for (const item of data2) {
     const key = `${item.bulan}`;
     const existing = mergedMap.get(key);
 
     if (existing) {
-      // Sum all numeric fields
+      // Sum numeric fields
       const summed: Availability = {
         bulan: item.bulan,
         armada: existing.armada + item.armada,
@@ -147,44 +147,40 @@ export function mergeAndCalculateAvailability(
         tso: existing.tso + item.tso,
         so: existing.so + item.so,
         sf: existing.sf + item.sf,
-        asistensi: existing.asistensi + item.asistensi,
+        kirimAsistensi: existing.kirimAsistensi + (item.kirimAsistensi ?? 0),
+        terimaAsistensi: existing.terimaAsistensi + (item.terimaAsistensi ?? 0),
         cadangan: existing.cadangan + item.cadangan,
-        programAvailability: 0,
-        availability: 0,
-        utilisasi: 0,
+        persen_ProgramAvailability: 0,
+        persen_Availability: 0,
+        persen_Utilisasi: 0,
       };
 
-      // Total calculation
-      const total = summed.tsgo + summed.sgo + summed.tso + summed.so + summed.sf + summed.asistensi + summed.cadangan;
+      // Calculate totals
+      const total = summed.tsgo + summed.sgo + summed.tso + summed.so + summed.sf + summed.kirimAsistensi + summed.terimaAsistensi + summed.cadangan;
       const available = summed.so + summed.sf;
-      const active = summed.so + summed.sf + summed.asistensi;
-
-      let programAvailability = 0;
-      let availability = 0;
-      let utilisasi = 0;
+      const active = summed.so + summed.sf + summed.terimaAsistensi;
 
       if (total > 0) {
-        programAvailability = +(available / total * 100).toFixed(2);
-        availability = +(item.so / total * 100).toFixed(2);
-        utilisasi = +(active / total * 100).toFixed(2);
+        summed.persen_ProgramAvailability = +(available / total * 100).toFixed(2);
+        summed.persen_Availability = +(summed.so / total * 100).toFixed(2);
+        summed.persen_Utilisasi = +(active / total * 100).toFixed(2);
       }
-
-      summed.programAvailability = programAvailability;
-      summed.availability = availability;
-      summed.utilisasi = utilisasi;
 
       mergedMap.set(key, summed);
     } else {
-      // Add second dataset row if not exist in first
-      const total = item.tsgo + item.sgo + item.tso + item.so + item.sf + item.asistensi + item.cadangan;
+      // If key not exist in map, just add item from data2 with percentage calculated
+      const kirimAsistensi = item.kirimAsistensi ?? 0;
+      const terimaAsistensi = item.terimaAsistensi ?? 0;
+
+      const total = item.tsgo + item.sgo + item.tso + item.so + item.sf + kirimAsistensi + terimaAsistensi + item.cadangan;
       const available = item.so + item.sf;
-      const active = item.so + item.sf + item.asistensi;
+      const active = item.so + item.sf + terimaAsistensi;
 
       const newItem: Availability = {
         ...item,
-        programAvailability: +(available / total * 100).toFixed(2),
-        availability: +(item.so / total * 100).toFixed(2),
-        utilisasi: +(active / total * 100).toFixed(2),
+        persen_ProgramAvailability: total > 0 ? +(available / total * 100).toFixed(2) : 0,
+        persen_Availability: total > 0 ? +(item.so / total * 100).toFixed(2) : 0,
+        persen_Utilisasi: total > 0 ? +(active / total * 100).toFixed(2) : 0,
       };
 
       mergedMap.set(key, newItem);
