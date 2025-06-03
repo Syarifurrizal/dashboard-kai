@@ -10,7 +10,7 @@ import { dateToIDString } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-    const range = "SALDO GUDANG KDK YK!A2:B";
+    const range = "SALDO GUDANG KDT SLO!A2:B";
 
     const [data, setData] = useState<SaldoGudang[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -68,7 +68,7 @@ export default function Page() {
 
     return (
         <main className="w-full flex flex-col gap-4">
-            <h1 className="font-bold text-2xl pb-2">Saldo Gudang KDK YK</h1>
+            <h1 className="font-bold text-2xl pb-2">Saldo Gudang KDT SLO</h1>
             <div className="flex flex-col gap-2">
                 <h1 className="font-medium text-md">Pilih data:</h1>
                 <SelectBulan

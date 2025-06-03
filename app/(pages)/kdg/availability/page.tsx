@@ -9,19 +9,13 @@ import DistribusiChart from "@/components/availability/DistribusiChart";
 import { AvailabilityChart } from "@/components/availability/AvailabilityChart";
 import AvailabiltyChartSkeleton from "@/components/availability/AvailabilityChartSkeleton";
 import DistribusiChartSkeleton from "@/components/availability/DistribusiChartSkeleton";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { calculateAvailabilityPercentages, mergeAndRecalculatesAvailability } from "@/lib/utils";
+import { calculateAvailabilityPercentages } from "@/lib/utils";
 
 export default function Page() {
 
-    const range1 = "AVAILABILITY KDK YK!S3:AC14";
-    const range2 = "AVAILABILITY KDK SLO!S3:AC14";
+    const range = "AVAILABILITY KDG RWL!S3:AC14";
 
-    const [mergedData, setMergeData] = useState<Availability[]>([]);
-    const [data1, setData1] = useState<Availability[]>([]);
-    const [data2, setData2] = useState<Availability[]>([]);
-
-    const [selectedSource, setSelectedSource] = useState<string>('All');
+    const [data, setData] = useState<Availability[]>([]);
 
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -32,23 +26,13 @@ export default function Page() {
             try {
                 setError(null);
 
-                const [res1, res2] = await Promise.all([
-                    fetch(`/api/availability?range=${encodeURIComponent(range1)}`),
-                    fetch(`/api/availability?range=${encodeURIComponent(range2)}`)
-                ]);
+                const res = await fetch(`/api/availability?range=${encodeURIComponent(range)}`);
 
-                if (!res1.ok || !res2.ok) throw new Error("Failed to fetch one or both datasets");
+                if (!res.ok) throw new Error("Failed to fetch datasets");
 
-                const [data1, data2]: [Availability[], Availability[]] = await Promise.all([
-                    res1.json(),
-                    res2.json()
-                ]);
+                const json: Availability[] = await res.json();
+                setData(calculateAvailabilityPercentages(json));
 
-                setData1(calculateAvailabilityPercentages(data1));
-                setData2(calculateAvailabilityPercentages(data2));
-
-                const tempMergedData = mergeAndRecalculatesAvailability(data1, data2);
-                setMergeData(tempMergedData);
             } catch (err) {
                 if (err instanceof Error) {
                     setError(err.message);
@@ -61,42 +45,16 @@ export default function Page() {
         }
 
         fetchData();
-    }, [range1, range2]);
+    }, [range]);
 
 
     if (error) return <p>Error: {error}</p>;
-
-    const data =
-        selectedSource === "KDK YK"
-            ? data1
-            : selectedSource === "KDK SLO"
-                ? data2
-                : mergedData
-
 
     return (
 
         <>
             <main className="w-full flex flex-col gap-4">
-                <h1 className="font-bold text-2xl">Availability KDK</h1>
-                <div className="flex flex-col gap-2">
-                    <h1 className="font-medium text-md">Pilih data:</h1>
-                    <Select
-                        value={selectedSource}
-                        onValueChange={(val) => {
-                            setSelectedSource(val);
-                        }}
-                    >
-                        <SelectTrigger className="w-fit">
-                            <SelectValue placeholder="Pilih sumber data" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="All">Gabungan</SelectItem>
-                            <SelectItem value="KDK YK">KDK YK</SelectItem>
-                            <SelectItem value="KDK SLO">KDK SLO</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
+                <h1 className="font-bold text-2xl">Availability KDG RWL</h1>
                 {loading ? (
                     <div className="flex flex-col w-full gap-4">
                         <div className="flex flex-col md:flex-row w-full gap-4">

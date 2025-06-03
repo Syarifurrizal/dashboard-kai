@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
 
-    const range = "KDK YK 2025!B4:F15";
+    const range = "KDG RWL 2025!B4:F15";
 
     const [data, setData] = useState<BalanceMovement[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -44,11 +44,7 @@ export default function Page() {
     return (
         <>
             <main className="w-full flex flex-col gap-4">
-<<<<<<<< HEAD:app/(pages)/kdk/balancemovementyk/page.tsx
-                <h1 className="font-bold text-2xl">Balance Movement KDK YK</h1>
-========
-                <h1 className="font-bold text-2xl">Balance Movement KDT YK</h1>
->>>>>>>> develop:app/(pages)/kdt/balancemovementyk/page.tsx
+                <h1 className="font-bold text-2xl">Balance Movement KDG RWL</h1>
                 {loading ? (
                     <div className="flex flex-col w-full gap-4">
                         <BalanceMovementChartSkeleton />
