@@ -12,12 +12,20 @@ export async function GET(request: Request) {
 
         const data = await fetchBalanceMovement(range);
 
-        // Check if data is empty or undefined and handle it
         if (!data || data.length === 0) {
-            return NextResponse.json([], { status: 200 }); // Return empty array, not empty response
+            return NextResponse.json([], { status: 200 });
         }
 
-        return NextResponse.json(data);
+        // Serialize BigInt fields to string before sending response
+        const serializedData = data.map(item => ({
+            ...item,
+            awal: item.awal.toString(),
+            terima: item.terima.toString(),
+            pakai: item.pakai.toString(),
+            saldo: item.saldo.toString(),
+        }));
+
+        return NextResponse.json(serializedData);
 
     } catch (error) {
         if (error instanceof Error) {
@@ -27,5 +35,4 @@ export async function GET(request: Request) {
         }
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
-
 }

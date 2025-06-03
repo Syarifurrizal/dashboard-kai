@@ -2,7 +2,7 @@
 
 import { CartesianGrid, XAxis, YAxis, Bar, LabelList, Cell, BarChart, } from "recharts";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, } from "../ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, } from "../ui/chart";
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent, } from "../ui/chart";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "../ui/select";
 import { Availability } from "@/lib/definitions";
 import { useEffect, useState, useMemo } from "react";
@@ -13,6 +13,12 @@ interface Props {
     chartTitle: string;
     chartData: Availability[];
 }
+
+const chartConfig = {
+    nilaiPerforma: {
+        label: "Performa",
+    },
+} satisfies ChartConfig
 
 export function AvailabilityChart({ chartTitle, chartData }: Props) {
 
@@ -78,12 +84,11 @@ export function AvailabilityChart({ chartTitle, chartData }: Props) {
                 </CardDescription>
             </CardHeader>
             <CardContent className="h-[300px]">
-                <ChartContainer config={{}} className="h-full w-full">
+                <ChartContainer config={chartConfig} className="h-full w-full">
                     <BarChart data={barChartData}>
                         <CartesianGrid vertical={false} />
                         <XAxis dataKey="jenisPerforma" tickLine={false} tickMargin={10} axisLine={false} />
                         <YAxis />
-                        <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
                         <Bar dataKey="nilaiPerforma" radius={8} isAnimationActive={true}>
                             <LabelList
                                 dataKey="nilaiPerforma"
@@ -99,6 +104,11 @@ export function AvailabilityChart({ chartTitle, chartData }: Props) {
                                 />
                             ))}
                         </Bar>
+                        <ChartTooltip
+                            content={<ChartTooltipContent hideIndicator />}
+                            cursor={false}
+                            defaultIndex={1}
+                        />
                     </BarChart>
                 </ChartContainer>
             </CardContent>

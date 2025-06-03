@@ -120,9 +120,10 @@ export default function BalanceMovementChart({ data }: Props) {
                             </defs>
                             <Area
                                 dataKey="awal"
-                                type="natural"
+                                type="linear"
                                 fill="url(#fillAwal)"
-                                fillOpacity={0.4}
+                                fillOpacity={0}
+                                strokeWidth={2}
                                 stroke="var(--color-awal)"
                                 dot={{
                                     fill: "var(--color-awal)",
@@ -133,9 +134,10 @@ export default function BalanceMovementChart({ data }: Props) {
                             />
                             <Area
                                 dataKey="terima"
-                                type="natural"
+                                type="linear"
                                 fill="url(#fillTerima)"
-                                fillOpacity={0.4}
+                                fillOpacity={0}
+                                strokeWidth={2}
                                 stroke="var(--color-terima)"
                                 dot={{
                                     fill: "var(--color-terima)",
@@ -146,9 +148,10 @@ export default function BalanceMovementChart({ data }: Props) {
                             />
                             <Area
                                 dataKey="pakai"
-                                type="natural"
+                                type="linear"
                                 fill="url(#fillPakai)"
-                                fillOpacity={0.4}
+                                fillOpacity={0}
+                                strokeWidth={2}
                                 stroke="var(--color-pakai)"
                                 dot={{
                                     fill: "var(--color-pakai)",
@@ -159,9 +162,10 @@ export default function BalanceMovementChart({ data }: Props) {
                             />
                             <Area
                                 dataKey="saldo"
-                                type="natural"
+                                type="linear"
                                 fill="url(#fillSaldo)"
-                                fillOpacity={0.4}
+                                fillOpacity={0}
+                                strokeWidth={2}
                                 stroke="var(--color-saldo)"
                                 dot={{
                                     fill: "var(--color-saldo)",

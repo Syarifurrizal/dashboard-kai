@@ -4,16 +4,20 @@ import PerawatanChartSkeleton from "@/components/perawatan/PerawatanChartSkeleto
 import PerawatanTable from "@/components/perawatan/PerawatanTable";
 import PerawatanTableSkeleton from "@/components/perawatan/PerawatanTableSkeleton";
 import { Perawatan } from "@/lib/definitions";
-import { mergeAndCalculatePerawatan } from "@/lib/utils";
+import { calculatePerawatanPercentage, mergeAndRecalculatePerawatan } from "@/lib/utils";
 import { useEffect, useState } from "react";
-
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function Page() {
 
-    const range1 = "PERAWATAN KDT YK!AC3:AK14";
-    const range2 = "PERAWATAN KDT SLO!AC5:AO16";
+    const range1 = "PERAWATAN KDK YK!AC4:BG20";
+    const range2 = "PERAWATAN KDK SLO!AC4:AO15";
 
-    const [data, setData] = useState<Perawatan[]>([]);
+    const [mergedData, setMergeData] = useState<Perawatan[]>([]);
+    const [data1, setData1] = useState<Perawatan[]>([]);
+    const [data2, setData2] = useState<Perawatan[]>([]);
+
+    const [selectedSource, setSelectedSource] = useState<string>('All');
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -24,7 +28,7 @@ export default function Page() {
                 setError(null);
 
                 const [res1, res2] = await Promise.all([
-                    fetch(`/api/perawatan?range=${encodeURIComponent(range1)}&type=normal`),
+                    fetch(`/api/perawatan?range=${encodeURIComponent(range1)}&type=persen`),
                     fetch(`/api/perawatan?range=${encodeURIComponent(range2)}&type=persen`)
                 ]);
 
@@ -35,8 +39,12 @@ export default function Page() {
                     res2.json()
                 ]);
 
-                const mergedData: Perawatan[] = mergeAndCalculatePerawatan(data1, data2);
-                setData(mergedData);
+                setData1(calculatePerawatanPercentage(data1));
+                setData2(calculatePerawatanPercentage(data2));
+
+                const tempMergedData = mergeAndRecalculatePerawatan(data1, data2);
+                setMergeData(tempMergedData);
+
             } catch (err) {
                 if (err instanceof Error) {
                     setError(err.message);
@@ -54,10 +62,36 @@ export default function Page() {
 
     if (error) return <p>Error: {error}</p>;
 
+    const data =
+        selectedSource === "KDK SLO"
+            ? data1
+            : selectedSource === "KDK YK"
+                ? data2
+                : mergedData
+
     return (
         <>
             <main className="w-full flex flex-col gap-4">
                 <h1 className="font-bold text-2xl">Perawatan KDK</h1>
+                <div className="flex flex-col gap-2">
+                    <h1 className="font-medium text-md">Pilih data:</h1>
+                    <Select
+                        value={selectedSource}
+                        onValueChange={(val) => {
+                            setSelectedSource(val);
+                        }}
+                    >
+                        <SelectTrigger className="w-fit">
+                            <SelectValue placeholder="Pilih sumber data" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="All">Gabungan</SelectItem>
+                            <SelectItem value="KDK YK">KDK YK</SelectItem>
+                            <SelectItem value="KDK SLO">KDK SLO</SelectItem>
+                        </SelectContent>
+                    </Select>
+
+                </div>
                 {loading ? (
                     <div className="flex flex-col w-full gap-4">
                         <PerawatanChartSkeleton />

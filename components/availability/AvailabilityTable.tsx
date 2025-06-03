@@ -5,6 +5,7 @@ import React from "react";
 
 import { Table, TableCaption, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../ui/table";
 import { Card } from "../ui/card";
+import { trimDecimal } from "@/lib/utils";
 
 interface Props {
     data: Availability[];
@@ -50,9 +51,9 @@ export default function AvailabilityTable({ data }: Props) {
                                     <TableCell>{row.kirimAsistensi}</TableCell>
                                     <TableCell>{row.terimaAsistensi}</TableCell>
                                     <TableCell>{row.cadangan}</TableCell>
-                                    <TableCell>{isNaN(row.persen_ProgramAvailability) ? "Invalid" : row.persen_ProgramAvailability + " %"}</TableCell>
-                                    <TableCell>{isNaN(row.persen_Availability) ? "Invalid" : row.persen_Availability + " %"}</TableCell>
-                                    <TableCell>{isNaN(row.persen_Utilisasi) ? "Invalid" : row.persen_Utilisasi + " %"}</TableCell>
+                                    <TableCell>{isNaN(row.persen_ProgramAvailability) ? "Invalid" : trimDecimal(row.persen_ProgramAvailability) + " %"}</TableCell>
+                                    <TableCell>{isNaN(row.persen_Availability) ? "Invalid" : trimDecimal(row.persen_Availability) + " %"}</TableCell>
+                                    <TableCell>{isNaN(row.persen_Utilisasi) ? "Invalid" : trimDecimal(row.persen_Utilisasi) + " %"}</TableCell>
                                 </TableRow>
                             ))
                         }
