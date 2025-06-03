@@ -8,7 +8,6 @@ import {
     SidebarMenuButton
 } from "@/components/ui/sidebar"
 import { ChevronDown, ChevronRight } from "lucide-react"
-import SidebarContent from "./AppSidebarContent"
 import AppSidebarContent from "./AppSidebarContent"
 
 interface SidebarDropdownProps {
