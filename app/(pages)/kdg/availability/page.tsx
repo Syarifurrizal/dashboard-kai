@@ -9,8 +9,7 @@ import DistribusiChart from "@/components/availability/DistribusiChart";
 import { AvailabilityChart } from "@/components/availability/AvailabilityChart";
 import AvailabiltyChartSkeleton from "@/components/availability/AvailabilityChartSkeleton";
 import DistribusiChartSkeleton from "@/components/availability/DistribusiChartSkeleton";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { calculateAvailabilityPercentages, mergeAndRecalculatesAvailability } from "@/lib/utils";
+import { calculateAvailabilityPercentages } from "@/lib/utils";
 
 export default function Page() {
 

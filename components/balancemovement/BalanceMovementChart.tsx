@@ -66,6 +66,7 @@ export default function BalanceMovementChart({ data }: Props) {
                                 tickCount={8}
                                 tickFormatter={(value) => formatSaldoBesar(Number(value), 1)}
                             />
+
                             <ChartTooltip cursor={true} content={<ChartTooltipContent />} />
                             <ChartLegend content={<ChartLegendContent />} />
                             <defs>

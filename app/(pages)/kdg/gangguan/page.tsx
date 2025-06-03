@@ -5,7 +5,6 @@ import GangguanTable from "@/components/gangguan/GangguanTable";
 import GangguanTableSkeleton from "@/components/gangguan/GangguanTableSkeleton";
 import { Gangguan } from "@/lib/definitions";
 import { useEffect, useState } from "react";
-import { mergeGangguan } from "@/lib/utils";
 
 export default function Page() {
 
