@@ -1,6 +1,6 @@
 import { Availability } from "@/lib/definitions";
 import { fetchSheetData } from "@/lib/googlesheet";
-import { capitalizeFirstLetter, cleanToAlphabets, toDate, toFloat, toInt } from "@/lib/utils";
+import { capitalizeFirstLetter, cleanToAlphabets, toInt } from "@/lib/utils";
 
 export async function fetchAvailability(range: string): Promise<Availability[]> {
     const rows = await fetchSheetData({ range: range });
@@ -21,7 +21,7 @@ export async function fetchAvailability(range: string): Promise<Availability[]> 
             kirimAsistensi: toInt(row[7]),
             terimaAsistensi: toInt(row[8]),
             cadangan: toInt(row[9]),
-            persen_ProgramAvailability: 0,
+            persen_ProgramAvailability: toInt(row[10]),
             persen_Availability: 0,
             persen_Utilisasi: 0,
         }

@@ -5,18 +5,24 @@ import { useEffect, useState } from "react";
 import { Availability } from "@/lib/definitions";
 import AvailabilityTable from "@/components/availability/AvailabilityTable";
 import AvailabilityTableSkeleton from "@/components/availability/AvailabilityTableSkeleton";
-import { mergeAndCalculateAvailability } from "@/lib/utils";
 import DistribusiChart from "@/components/availability/DistribusiChart";
 import { AvailabilityChart } from "@/components/availability/AvailabilityChart";
 import AvailabiltyChartSkeleton from "@/components/availability/AvailabilityChartSkeleton";
 import DistribusiChartSkeleton from "@/components/availability/DistribusiChartSkeleton";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { calculateAvailabilityPercentages, mergeAndRecalculatesAvailability } from "@/lib/utils";
 
 export default function Page() {
 
-    const range1 = "AVAILABILITY KDK SLO!S3:AB14";
-    const range2 = "AVAILABILITY KDK YK!S3:AB14";
+    const range1 = "AVAILABILITY KDK SLO!S3:AC14";
+    const range2 = "AVAILABILITY KDK YK!S3:AC14";
 
-    const [data, setData] = useState<Availability[]>([]);
+    const [mergedData, setMergeData] = useState<Availability[]>([]);
+    const [data1, setData1] = useState<Availability[]>([]);
+    const [data2, setData2] = useState<Availability[]>([]);
+
+    const [selectedSource, setSelectedSource] = useState<string>('All');
+
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -38,8 +44,11 @@ export default function Page() {
                     res2.json()
                 ]);
 
-                const mergedData = mergeAndCalculateAvailability(data1, data2);
-                setData(mergedData);
+                setData1(calculateAvailabilityPercentages(data1));
+                setData2(calculateAvailabilityPercentages(data2));
+
+                const tempMergedData = mergeAndRecalculatesAvailability(data1, data2);
+                setMergeData(tempMergedData);
             } catch (err) {
                 if (err instanceof Error) {
                     setError(err.message);
@@ -57,10 +66,37 @@ export default function Page() {
 
     if (error) return <p>Error: {error}</p>;
 
+    const data =
+        selectedSource === "KDK SLO"
+            ? data1
+            : selectedSource === "KDK YK"
+                ? data2
+                : mergedData
+
+
     return (
+
         <>
             <main className="w-full flex flex-col gap-4">
                 <h1 className="font-bold text-2xl">Availability KDK</h1>
+                <div className="flex flex-col gap-2">
+                    <h1 className="font-medium text-md">Pilih data:</h1>
+                    <Select
+                        value={selectedSource}
+                        onValueChange={(val) => {
+                            setSelectedSource(val);
+                        }}
+                    >
+                        <SelectTrigger className="w-fit">
+                            <SelectValue placeholder="Pilih sumber data" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="All">Gabungan</SelectItem>
+                            <SelectItem value="KDK YK">KDK YK</SelectItem>
+                            <SelectItem value="KDK SLO">KDK SLO</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
                 {loading ? (
                     <div className="flex flex-col w-full gap-4">
                         <div className="flex flex-col md:flex-row w-full gap-4">

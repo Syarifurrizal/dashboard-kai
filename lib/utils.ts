@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { Availability, Perawatan } from "./definitions";
+import { Availability, Gangguan, Perawatan } from "./definitions";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -22,10 +22,29 @@ export function toFloat(input: string): number {
   return isNaN(result) ? 0 : result
 }
 
-export function toInt(input: string): number {
-  const cleaned = input.replace(/[^\d-]+/g, "")
-  const result = parseInt(cleaned, 10)
-  return isNaN(result) ? 0 : result
+export function toInt(value: string | number | null | undefined): number {
+  if (value === null || value === undefined) return 0;
+
+  let stringValue: string;
+
+  if (typeof value === 'number') {
+    // Convert to fixed to prevent precision loss
+    stringValue = Math.floor(value).toString();
+  } else {
+    // Already string
+    stringValue = value;
+  }
+
+  // Remove thousand separators (dot or comma), but preserve minus
+  const cleaned = stringValue.replace(/[^\d-]/g, '');
+
+  const parsed = parseInt(cleaned, 10);
+  return isNaN(parsed) ? 0 : parsed;
+}
+
+
+export function trimDecimal(num: number): string {
+  return num % 1 === 0 ? num.toFixed(0) : num.toFixed(2).replace(/\.?0+$/, '');
 }
 
 export function countPercentage(...args: [number, number]): number {
@@ -64,7 +83,11 @@ export function formatSaldoBesar(amount: number, precision: number = 0, useComma
   return result + suffix;
 }
 
-export function toIDR(number: number, decimalDigits = 0) {
+export function toIDR(number: number | bigint, decimalDigits = 0) {
+  if (typeof number === "bigint") {
+    // Warning: This may lose precision if bigint too big!
+    number = Number(number);
+  }
   return new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
@@ -126,26 +149,43 @@ export function toDate(dateStr: string): Date {
   return date;
 }
 
-export function mergeAndCalculateAvailability(
+export function calculatePersenAvailability(sgo: number, so: number): number {
+  return sgo !== 0 ? (so / sgo) * 100 : 0;
+}
+
+export function calculatePersenUtilisasi(so: number, sf: number): number {
+  return so !== 0 ? sf / so : 0;
+}
+
+export function calculateAvailabilityPercentages(data: Availability[]): Availability[] {
+  return data.map(item => ({
+    ...item,
+    persen_Availability: calculatePersenAvailability(item.sgo, item.so),
+    persen_Utilisasi: calculatePersenUtilisasi(item.so, item.sf),
+  }));
+}
+
+export function mergeAndRecalculatesAvailability(
   data1: Availability[],
   data2: Availability[]
 ): Availability[] {
   const mergedMap = new Map<string, Availability>();
 
-  // Initialize map with data1
   for (const item of data1) {
-    const key = `${item.bulan}`;
-    mergedMap.set(key, { ...item });
+    mergedMap.set(item.bulan, { ...item });
   }
 
-  // Merge and sum data2
   for (const item of data2) {
-    const key = `${item.bulan}`;
+    const key = item.bulan;
     const existing = mergedMap.get(key);
 
     if (existing) {
-      // Sum numeric fields
-      const summed: Availability = {
+      const kirimAsistensi = item.kirimAsistensi ?? 0;
+      const terimaAsistensi = item.terimaAsistensi ?? 0;
+      const oldKirim = existing.kirimAsistensi ?? 0;
+      const oldTerima = existing.terimaAsistensi ?? 0;
+
+      const merged: Availability = {
         bulan: item.bulan,
         armada: existing.armada + item.armada,
         tsgo: existing.tsgo + item.tsgo,
@@ -153,40 +193,28 @@ export function mergeAndCalculateAvailability(
         tso: existing.tso + item.tso,
         so: existing.so + item.so,
         sf: existing.sf + item.sf,
-        kirimAsistensi: existing.kirimAsistensi + (item.kirimAsistensi ?? 0),
-        terimaAsistensi: existing.terimaAsistensi + (item.terimaAsistensi ?? 0),
+        kirimAsistensi: oldKirim + kirimAsistensi,
+        terimaAsistensi: oldTerima + terimaAsistensi,
         cadangan: existing.cadangan + item.cadangan,
-        persen_ProgramAvailability: 0,
+        persen_ProgramAvailability:
+          (existing.persen_ProgramAvailability || 0) === 0 && (item.persen_ProgramAvailability || 0) === 0
+            ? 0
+            : ((existing.persen_ProgramAvailability || 0) + (item.persen_ProgramAvailability || 0)) /
+            ((existing.persen_ProgramAvailability ? 1 : 0) + (item.persen_ProgramAvailability ? 1 : 0)),
         persen_Availability: 0,
         persen_Utilisasi: 0,
       };
 
-      // Calculate totals
-      const total = summed.tsgo + summed.sgo + summed.tso + summed.so + summed.sf + summed.kirimAsistensi + summed.terimaAsistensi + summed.cadangan;
-      const available = summed.so + summed.sf;
-      const active = summed.so + summed.sf + summed.terimaAsistensi;
+      merged.persen_Availability = calculatePersenAvailability(merged.sgo, merged.so);
+      merged.persen_Utilisasi = calculatePersenUtilisasi(merged.so, merged.sf);
 
-      if (total > 0) {
-        summed.persen_ProgramAvailability = +(available / total * 100).toFixed(2);
-        summed.persen_Availability = +(summed.so / total * 100).toFixed(2);
-        summed.persen_Utilisasi = +(active / total * 100).toFixed(2);
-      }
-
-      mergedMap.set(key, summed);
+      mergedMap.set(key, merged);
     } else {
-      // If key not exist in map, just add item from data2 with percentage calculated
-      const kirimAsistensi = item.kirimAsistensi ?? 0;
-      const terimaAsistensi = item.terimaAsistensi ?? 0;
-
-      const total = item.tsgo + item.sgo + item.tso + item.so + item.sf + kirimAsistensi + terimaAsistensi + item.cadangan;
-      const available = item.so + item.sf;
-      const active = item.so + item.sf + terimaAsistensi;
-
       const newItem: Availability = {
         ...item,
-        persen_ProgramAvailability: total > 0 ? +(available / total * 100).toFixed(2) : 0,
-        persen_Availability: total > 0 ? +(item.so / total * 100).toFixed(2) : 0,
-        persen_Utilisasi: total > 0 ? +(active / total * 100).toFixed(2) : 0,
+        persen_ProgramAvailability: item.persen_ProgramAvailability,
+        persen_Availability: calculatePersenAvailability(item.sgo, item.so),
+        persen_Utilisasi: calculatePersenUtilisasi(item.so, item.sf),
       };
 
       mergedMap.set(key, newItem);
@@ -196,24 +224,20 @@ export function mergeAndCalculateAvailability(
   return Array.from(mergedMap.values());
 }
 
-export function mergeAndCalculatePerawatan(
+export function mergeAndRecalculatePerawatan(
   data1: Perawatan[],
   data2: Perawatan[]
 ): Perawatan[] {
-
   const mergedMap = new Map<string, Perawatan>();
 
-  // First dataset (initialize map)
   for (const item of data1) {
-    const key = `${item.bulan}`;
+    const key = `${item.bulan}`.toLowerCase();
     mergedMap.set(key, { ...item });
   }
 
-  // Second dataset (sum into map)
   for (const item of data2) {
-    const key = `${item.bulan}`;
+    const key = `${item.bulan}`.toLowerCase();
     const existing = mergedMap.get(key);
-
 
     if (existing) {
       const sumP1 = existing.p1 + item.p1;
@@ -225,8 +249,8 @@ export function mergeAndCalculatePerawatan(
       const sumP12 = existing.p12 + item.p12;
       const sumRp12 = existing.rp12 + item.rp12;
 
-      const summed: Perawatan = {
-        bulan: item.bulan,
+      mergedMap.set(key, {
+        bulan: existing.bulan,
         p1: sumP1,
         rp1: sumRp1,
         persen_1: countPercentage(sumP1, sumRp1),
@@ -239,12 +263,57 @@ export function mergeAndCalculatePerawatan(
         p12: sumP12,
         rp12: sumRp12,
         persen_12: countPercentage(sumP12, sumRp12),
-      };
-
-      mergedMap.set(key, summed);
+      });
+    } else {
+      mergedMap.set(key, {
+        ...item,
+        persen_1: countPercentage(item.p1, item.rp1),
+        persen_3: countPercentage(item.p3, item.rp3),
+        persen_6: countPercentage(item.p6, item.rp6),
+        persen_12: countPercentage(item.p12, item.rp12),
+      });
     }
   }
 
-  return Array.from(mergedMap.values());
 
+  return Array.from(mergedMap.values());
+}
+
+export function calculatePerawatanPercentage(data: Perawatan[]): Perawatan[] {
+  return data.map(item => ({
+    ...item,
+    persen_1: countPercentage(item.p1, item.rp1),
+    persen_3: countPercentage(item.p3, item.rp3),
+    persen_6: countPercentage(item.p6, item.rp6),
+    persen_12: countPercentage(item.p12, item.rp12),
+  }));
+}
+
+export function mergeGangguan(data1: Gangguan[], data2: Gangguan[]): Gangguan[] {
+  const mergedMap = new Map<string, Gangguan>();
+
+  function addOrMerge(g: Gangguan) {
+    if (!mergedMap.has(g.bulan)) {
+      mergedMap.set(g.bulan, { ...g });
+    } else {
+      const existing = mergedMap.get(g.bulan)!;
+      mergedMap.set(g.bulan, {
+        bulan: g.bulan,
+        toleransi: existing.toleransi + g.toleransi,
+        realisasi: existing.realisasi + g.realisasi,
+        toleransiKereta: existing.toleransiKereta + g.toleransiKereta,
+        realisasiKereta: existing.realisasiKereta + g.realisasiKereta,
+        toleransiGenset: existing.toleransiGenset + g.toleransiGenset,
+        realisasiGenset: existing.realisasiGenset + g.realisasiGenset,
+        toleransiLPT: existing.toleransiLPT + g.toleransiLPT,
+        realisasiLPT: existing.realisasiLPT + g.realisasiLPT,
+        realisasiNonLPT: existing.realisasiNonLPT + g.realisasiNonLPT,
+      });
+    }
+  }
+
+  data1.forEach(addOrMerge);
+  data2.forEach(addOrMerge);
+
+  return Array.from(mergedMap.values());
 }
