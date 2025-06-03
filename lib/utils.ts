@@ -42,6 +42,14 @@ export function toInt(value: string | number | null | undefined): number {
   return isNaN(parsed) ? 0 : parsed;
 }
 
+export function cleanRupiahToNumber(value: string | null | undefined): number {
+  if (!value) return 0;
+
+  const cleaned = value.replace(/[^\d]/g, '');
+  const num = parseInt(cleaned, 10);
+
+  return isNaN(num) ? 0 : num;
+}
 
 export function trimDecimal(num: number): string {
   return num % 1 === 0 ? num.toFixed(0) : num.toFixed(2).replace(/\.?0+$/, '');

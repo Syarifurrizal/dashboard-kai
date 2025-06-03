@@ -14,8 +14,8 @@ import { calculateAvailabilityPercentages, mergeAndRecalculatesAvailability } fr
 
 export default function Page() {
 
-    const range1 = "AVAILABILITY KDK YK!S3:AC14";
-    const range2 = "AVAILABILITY KDK SLO!S3:AC14";
+    const range1 = "AVAILABILITY KDK SLO!S3:AC14";
+    const range2 = "AVAILABILITY KDK YK!S3:AC14";
 
     const [mergedData, setMergeData] = useState<Availability[]>([]);
     const [data1, setData1] = useState<Availability[]>([]);
@@ -67,9 +67,9 @@ export default function Page() {
     if (error) return <p>Error: {error}</p>;
 
     const data =
-        selectedSource === "KDK YK"
+        selectedSource === "KDK SLO"
             ? data1
-            : selectedSource === "KDK SLO"
+            : selectedSource === "KDK YK"
                 ? data2
                 : mergedData
 

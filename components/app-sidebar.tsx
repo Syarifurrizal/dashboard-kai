@@ -39,6 +39,17 @@ const kdk = [
   { title: "Saldo Gudang SLO", url: "/kdk/saldogudangslo", icon: BadgeDollarSign },
 ]
 
+const kdt = [
+
+  { title: "Availability", url: "/kdt/availability", icon: ShieldCheck },
+  { title: "Balance Movement YK", url: "/kdt/balancemovementyk", icon: ChartCandlestick },
+  { title: "Balance Movement SLO", url: "/kdt/balancemovementslo", icon: ChartCandlestick },
+  { title: "Gangguan", url: "/kdt/gangguan", icon: ShieldAlert },
+  { title: "Perawatan", url: "/kdt/perawatan", icon: Wrench },
+  { title: "Saldo Gudang YK", url: "/kdt/saldogudangyk", icon: BadgeDollarSign },
+  { title: "Saldo Gudang SLO", url: "/kdt/saldogudangslo", icon: BadgeDollarSign },
+]
+
 const kdg = [
 
   { title: "Availability", url: "/kdg/availability", icon: ShieldCheck },
@@ -46,18 +57,6 @@ const kdg = [
   { title: "Gangguan", url: "/kdg/gangguan", icon: ShieldAlert },
   { title: "Perawatan", url: "/kdg/perawatan", icon: Wrench },
   { title: "Saldo Gudang", url: "/kdg/saldogudang", icon: BadgeDollarSign },
-]
-
-const kdt = [
-
-  { title: "Availability", url: "/kdt/availability", icon: ShieldCheck },
-  { title: "Balance Movement SLO", url: "/kdt/balancemovementslo", icon: ChartCandlestick },
-  { title: "Balance Movement YK", url: "/kdt/balancemovementyk", icon: ChartCandlestick },
-  { title: "Gangguan", url: "/kdt/gangguan", icon: ShieldAlert },
-  { title: "Gangguan KRD", url: "/kdt/gangguankrd", icon: ShieldAlert },
-  { title: "Perawatan", url: "/kdt/perawatan", icon: Wrench },
-  { title: "Saldo Gudang SLO", url: "/kdt/saldogudangslo", icon: BadgeDollarSign },
-  { title: "Saldo Gudang YK", url: "/kdt/saldogudangyk", icon: BadgeDollarSign },
 ]
 
 export function AppSidebar() {

@@ -64,9 +64,9 @@ export default function Page() {
     if (error) return <p>Error: {error}</p>;
 
     const data =
-        selectedSource === "KDK SLO"
+        selectedSource === "KDK YK"
             ? data1
-            : selectedSource === "KDK YK"
+            : selectedSource === "KDK SLO"
                 ? data2
                 : mergedData
 

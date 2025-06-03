@@ -10,8 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 export default function Page() {
 
-    const range1 = "PERAWATAN KDK YK!AC4:BG20";
-    const range2 = "PERAWATAN KDK SLO!AC4:AO15";
+    const range1 = "PERAWATAN KDT YK!AC3:AL14";
+    const range2 = "PERAWATAN KDT SLO!AC5:AO16";
 
     const [mergedData, setMergeData] = useState<Perawatan[]>([]);
     const [data1, setData1] = useState<Perawatan[]>([]);
@@ -28,7 +28,7 @@ export default function Page() {
                 setError(null);
 
                 const [res1, res2] = await Promise.all([
-                    fetch(`/api/perawatan?range=${encodeURIComponent(range1)}&type=persen`),
+                    fetch(`/api/perawatan?range=${encodeURIComponent(range1)}&type=normal`),
                     fetch(`/api/perawatan?range=${encodeURIComponent(range2)}&type=persen`)
                 ]);
 
@@ -63,16 +63,16 @@ export default function Page() {
     if (error) return <p>Error: {error}</p>;
 
     const data =
-        selectedSource === "KDK YK"
+        selectedSource === "KDT YK"
             ? data1
-            : selectedSource === "KDK SLO"
+            : selectedSource === "KDT SLO"
                 ? data2
                 : mergedData
 
     return (
         <>
             <main className="w-full flex flex-col gap-4">
-                <h1 className="font-bold text-2xl">Perawatan KDK</h1>
+                <h1 className="font-bold text-2xl">Perawatan KDT</h1>
                 <div className="flex flex-col gap-2">
                     <h1 className="font-medium text-md">Pilih data:</h1>
                     <Select
@@ -86,8 +86,8 @@ export default function Page() {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="All">Gabungan</SelectItem>
-                            <SelectItem value="KDK YK">KDK YK</SelectItem>
-                            <SelectItem value="KDK SLO">KDK SLO</SelectItem>
+                            <SelectItem value="KDT YK">KDT YK</SelectItem>
+                            <SelectItem value="KDT SLO">KDT SLO</SelectItem>
                         </SelectContent>
                     </Select>
 
