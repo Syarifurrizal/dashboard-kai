@@ -34,10 +34,10 @@ export default function BalanceMovementTable({ data }: Props) {
                             data.map((row, i) => (
                                 <TableRow key={i}>
                                     <TableCell>{row.bulan}</TableCell>
-                                    <TableCell>{isNaN(row.awal) ? "Invalid" : toIDR(row.awal, 2)}</TableCell>
-                                    <TableCell>{isNaN(row.terima) ? "Invalid" : toIDR(row.terima, 2)}</TableCell>
-                                    <TableCell>{isNaN(row.pakai) ? "Invalid" : toIDR(row.pakai, 2)}</TableCell>
-                                    <TableCell>{isNaN(row.saldo) ? "Invalid" : toIDR(row.saldo, 2)}</TableCell>
+                                    <TableCell>{toIDR(row.awal, 2)}</TableCell>
+                                    <TableCell>{toIDR(row.terima, 2)}</TableCell>
+                                    <TableCell>{toIDR(row.pakai, 2)}</TableCell>
+                                    <TableCell>{toIDR(row.saldo, 2)}</TableCell>
                                 </TableRow>
                             ))
                         }

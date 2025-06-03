@@ -2,9 +2,11 @@
 
 import {
   BadgeDollarSign,
+  Briefcase,
   ChartCandlestick,
   ShieldAlert,
   ShieldCheck,
+  TrainIcon,
   Wrench,
 } from "lucide-react"
 
@@ -22,20 +24,19 @@ import Image from "next/image"
 
 import Logo from "@/public/KAI.svg"
 import { SidebarDropdown } from "./SidebarDropdown"
+import AppSidebarContent from "./AppSidebarContent"
 
 
 
 const kdk = [
 
   { title: "Availability", url: "/kdk/availability", icon: ShieldCheck },
-  // { title: "Saldo Gudang YK", url: "/kdk/saldogudangyk", icon: BadgeDollarSign },
-  // { title: "Saldo Gudang SLO", url: "/kdk/saldogudangslo", icon: BadgeDollarSign },
-  // { title: "Balance Movement YK", url: "/kdk/balancemovementyk", icon: ChartCandlestick },
-  // { title: "Balance Movement SLO", url: "/kdk/balancemovementslo", icon: ChartCandlestick },
-  { title: "Balance Movement", url: "/kdk/balancemovement", icon: ChartCandlestick },
+  { title: "Balance Movement YK", url: "/kdk/balancemovementyk", icon: ChartCandlestick },
+  { title: "Balance Movement SLO", url: "/kdk/balancemovementslo", icon: ChartCandlestick },
   { title: "Gangguan", url: "/kdk/gangguan", icon: ShieldAlert },
   { title: "Perawatan", url: "/kdk/perawatan", icon: Wrench },
-  { title: "Saldo Gudang", url: "/kdk/saldogudang", icon: BadgeDollarSign },
+  { title: "Saldo Gudang YK", url: "/kdk/saldogudangyk", icon: BadgeDollarSign },
+  { title: "Saldo Gudang SLO", url: "/kdk/saldogudangslo", icon: BadgeDollarSign },
 ]
 
 const kdg = [
@@ -70,18 +71,21 @@ export function AppSidebar() {
 
         <Separator />
         <SidebarGroup>
-
           <SidebarGroupContent>
             <SidebarMenu>
+              <SidebarGroupLabel>Armada</SidebarGroupLabel>
+              <AppSidebarContent title="Sarana" url="/armada" icon={TrainIcon} />
 
-              <SidebarGroupLabel>Sarana</SidebarGroupLabel>
+              <div className="flex items-center gap-2 pt-2">
+                <SidebarGroupLabel>Sarana</SidebarGroupLabel>
+              </div>
               <SidebarDropdown label="KDK" items={kdk} />
               <SidebarDropdown label="KDT" items={kdt} />
               <SidebarDropdown label="KDG" items={kdg} />
-              <div className="flex items-center gap-2 pt-4">
+              <div className="flex items-center gap-2 pt-2">
                 <SidebarGroupLabel>Jabatan</SidebarGroupLabel>
               </div>
-
+              <AppSidebarContent title="Jabatan" url="/jabatan" icon={Briefcase} />
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

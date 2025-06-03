@@ -8,8 +8,7 @@ import {
     SidebarMenuButton
 } from "@/components/ui/sidebar"
 import { ChevronDown, ChevronRight } from "lucide-react"
-import { usePathname } from "next/navigation" // ⬅️ Tambahin ini
-import Link from "next/link"
+import AppSidebarContent from "./AppSidebarContent"
 
 interface SidebarDropdownProps {
     label: string
@@ -23,8 +22,6 @@ interface SidebarDropdownProps {
 export function SidebarDropdown({ label, items }: SidebarDropdownProps) {
     const key = `sidebar-dropdown-${label.toLowerCase().replace(/\s/g, "-")}`
     const [open, setOpen] = useState<boolean>(false)
-
-    const pathname = usePathname() // ⬅️ Ambil route sekarang
 
     useEffect(() => {
         const saved = localStorage.getItem(key)
@@ -54,23 +51,9 @@ export function SidebarDropdown({ label, items }: SidebarDropdownProps) {
 
                 {open &&
                     items.map((item) => {
-                        const isActive = pathname === item.url
 
                         return (
-                            <SidebarMenuItem key={item.title}>
-                                <SidebarMenuButton
-                                    asChild
-                                    className={`flex items-center gap-2 pl-6 py-1 rounded-md transition-colors ${isActive
-                                        ? "bg-[#2d2a70] text-white hover:bg-[#ed6b23] hover:text-white"
-                                        : "hover:text-primary"
-                                        }`}
-                                >
-                                    <Link href={item.url}>
-                                        <item.icon size={16} />
-                                        <span>{item.title}</span>
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
+                            <AppSidebarContent key={item.title} title={item.title} url={item.url} icon={item.icon} />
                         )
                     })}
             </SidebarMenu>
