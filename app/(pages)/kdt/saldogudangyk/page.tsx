@@ -68,11 +68,7 @@ export default function Page() {
 
     return (
         <main className="w-full flex flex-col gap-4">
-<<<<<<<< HEAD:app/(pages)/kdk/saldogudangyk/page.tsx
-            <h1 className="font-bold text-2xl pb-2">Availability KDK YK</h1>
-========
             <h1 className="font-bold text-2xl pb-2">Saldo Gudang KDT YK</h1>
->>>>>>>> develop:app/(pages)/kdt/saldogudangyk/page.tsx
             <div className="flex flex-col gap-2">
                 <h1 className="font-medium text-md">Pilih data:</h1>
                 <SelectBulan
