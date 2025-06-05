@@ -6,7 +6,7 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "../ui/chart";
 
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
 import { formatSaldoBesar } from "@/lib/utils";
 
 interface Props {
@@ -33,99 +33,51 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export default function BalanceMovementChart({ data }: Props) {
+    const maxYValue = Math.max(
+        ...data.flatMap((item) =>
+            [item.awal, item.terima, item.pakai, item.saldo].filter((val) => val > 0)
+        )
+    );
+
 
     return (
         <>
             <Card>
                 <CardHeader>
-                    <CardTitle>Saldo Gudang</CardTitle>
+                    <CardTitle>Balance Movement</CardTitle>
                     <CardDescription>Januari - Desember</CardDescription>
                 </CardHeader>
                 <CardContent >
                     <ChartContainer className="max-h-110 w-full" config={chartConfig}>
-                        <AreaChart
+                        <LineChart
                             accessibilityLayer
                             data={data}
                             margin={{
                                 left: 12,
                                 right: 12,
+                                top: 12,
                             }}
                         >
                             <CartesianGrid vertical={false} />
                             <XAxis
                                 dataKey="bulan"
                                 tickLine={true}
-                                axisLine={true}
-                                tickMargin={8}
                                 tickFormatter={(value) => value.slice(0, 3)}
                             />
                             <YAxis
                                 tickLine={true}
-                                axisLine={true}
-                                tickMargin={10}
-                                tickCount={8}
                                 tickFormatter={(value) => formatSaldoBesar(Number(value), 1)}
+                                domain={[0, maxYValue]}
+                                tickCount={6}
                             />
 
                             <ChartTooltip cursor={true} content={<ChartTooltipContent />} />
                             <ChartLegend content={<ChartLegendContent />} />
-                            <defs>
-                                <linearGradient id="fillAwal" x1="0" y1="0" x2="0" y2="1">
-                                    <stop
-                                        offset="5%"
-                                        stopColor="hsl(var(--chart-blue))"
-                                        stopOpacity={0.8}
-                                    />
-                                    <stop
-                                        offset="95%"
-                                        stopColor="hsl(var(--chart-blue))"
-                                        stopOpacity={0.1}
-                                    />
-                                </linearGradient>
-                                <linearGradient id="fillTerima" x1="0" y1="0" x2="0" y2="1">
-                                    <stop
-                                        offset="5%"
-                                        stopColor="hsl(var(--chart-green))"
-                                        stopOpacity={0.8}
-                                    />
-                                    <stop
-                                        offset="95%"
-                                        stopColor="hsl(var(--chart-green))"
-                                        stopOpacity={0.1}
-                                    />
-                                </linearGradient>
-                                <linearGradient id="fillPakai" x1="0" y1="0" x2="0" y2="1">
-                                    <stop
-                                        offset="5%"
-                                        stopColor="hsl(var(--chart-red))"
-                                        stopOpacity={0.8}
-                                    />
-                                    <stop
-                                        offset="95%"
-                                        stopColor="hsl(var(--chart-red))"
-                                        stopOpacity={0.1}
-                                    />
-                                </linearGradient>
-                                <linearGradient id="fillSaldo" x1="0" y1="0" x2="0" y2="1">
-                                    <stop
-                                        offset="5%"
-                                        stopColor="hsl(var(--chart-yellow))"
-                                        stopOpacity={0.8}
-                                    />
-                                    <stop
-                                        offset="95%"
-                                        stopColor="hsl(var(--chart-yellow))"
-                                        stopOpacity={0.1}
-                                    />
-                                </linearGradient>
-                            </defs>
-                            <Area
+                            <Line
                                 dataKey="awal"
                                 type="linear"
-                                fill="url(#fillAwal)"
-                                fillOpacity={0}
-                                strokeWidth={2}
                                 stroke="var(--color-awal)"
+                                strokeWidth={2}
                                 dot={{
                                     fill: "var(--color-awal)",
                                 }}
@@ -133,13 +85,11 @@ export default function BalanceMovementChart({ data }: Props) {
                                     r: 6,
                                 }}
                             />
-                            <Area
+                            <Line
                                 dataKey="terima"
                                 type="linear"
-                                fill="url(#fillTerima)"
-                                fillOpacity={0}
-                                strokeWidth={2}
                                 stroke="var(--color-terima)"
+                                strokeWidth={2}
                                 dot={{
                                     fill: "var(--color-terima)",
                                 }}
@@ -147,13 +97,11 @@ export default function BalanceMovementChart({ data }: Props) {
                                     r: 6,
                                 }}
                             />
-                            <Area
+                            <Line
                                 dataKey="pakai"
                                 type="linear"
-                                fill="url(#fillPakai)"
-                                fillOpacity={0}
-                                strokeWidth={2}
                                 stroke="var(--color-pakai)"
+                                strokeWidth={2}
                                 dot={{
                                     fill: "var(--color-pakai)",
                                 }}
@@ -161,13 +109,11 @@ export default function BalanceMovementChart({ data }: Props) {
                                     r: 6,
                                 }}
                             />
-                            <Area
+                            <Line
                                 dataKey="saldo"
                                 type="linear"
-                                fill="url(#fillSaldo)"
-                                fillOpacity={0}
-                                strokeWidth={2}
                                 stroke="var(--color-saldo)"
+                                strokeWidth={2}
                                 dot={{
                                     fill: "var(--color-saldo)",
                                 }}
@@ -175,7 +121,7 @@ export default function BalanceMovementChart({ data }: Props) {
                                     r: 6,
                                 }}
                             />
-                        </AreaChart>
+                        </LineChart>
                     </ChartContainer>
                 </CardContent>
             </Card>

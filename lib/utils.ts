@@ -325,3 +325,12 @@ export function mergeGangguan(data1: Gangguan[], data2: Gangguan[]): Gangguan[] 
 
   return Array.from(mergedMap.values());
 }
+
+export function gangguanKDGToKDT(data: Gangguan[]): Gangguan[] {
+  return data.map(item => ({
+    ...item,
+    toleransiLPT: item.toleransi,
+    realisasiLPT: item.realisasi,
+    realisasiNonLPT: 0,
+  }));
+}
