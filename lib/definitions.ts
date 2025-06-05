@@ -1,3 +1,9 @@
+export interface Armada {
+    jenisKereta: string;
+    depo: string;
+    jumlah: number;
+}
+
 export interface Availability {
     bulan: string;
     armada: number;
