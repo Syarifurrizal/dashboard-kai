@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { Availability, Gangguan, Perawatan } from "./definitions";
+import { Armada, Availability, Gangguan, Perawatan } from "./definitions";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -322,6 +322,33 @@ export function mergeGangguan(data1: Gangguan[], data2: Gangguan[]): Gangguan[] 
 
   data1.forEach(addOrMerge);
   data2.forEach(addOrMerge);
+
+  return Array.from(mergedMap.values());
+}
+
+export function gangguanKDGToKDT(data: Gangguan[]): Gangguan[] {
+  return data.map(item => ({
+    ...item,
+    toleransiLPT: item.toleransi,
+    realisasiLPT: item.realisasi,
+    realisasiNonLPT: 0,
+  }));
+}
+
+export function mergeArmadaArrays(...arrays: Armada[][]): Armada[] {
+  const mergedMap = new Map<string, Armada>();
+
+  for (const array of arrays) {
+    for (const item of array) {
+      const key = `${item.jenisKereta}::${item.depo}`;
+      if (mergedMap.has(key)) {
+        const existing = mergedMap.get(key)!;
+        existing.jumlah += item.jumlah;
+      } else {
+        mergedMap.set(key, { ...item });
+      }
+    }
+  }
 
   return Array.from(mergedMap.values());
 }

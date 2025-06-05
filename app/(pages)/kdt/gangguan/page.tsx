@@ -6,16 +6,20 @@ import GangguanTableSkeleton from "@/components/gangguan/GangguanTableSkeleton";
 import { Gangguan } from "@/lib/definitions";
 import { useEffect, useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { mergeGangguan } from "@/lib/utils";
+import { gangguanKDGToKDT, mergeGangguan } from "@/lib/utils";
 
 export default function Page() {
 
-    const range1 = "KDK YK 2025!B21:F32";
-    const range2 = "KDK  SLO 2025!B22:F33";
+    const rangeYKLok = "KDT YK LOK 2025!B22:E33";
+    const rangeYKKrd = "KDT YK KRD 2025!B6:D17";
+    const rangeSLO = "KDT SLO 2025!B22:E33";
 
     const [mergedData, setMergeData] = useState<Gangguan[]>([]);
-    const [data1, setData1] = useState<Gangguan[]>([]);
-    const [data2, setData2] = useState<Gangguan[]>([]);
+
+    const [dataYK, setDataYK] = useState<Gangguan[]>([]);
+    const [dataYKLok, setDataYKLok] = useState<Gangguan[]>([]);
+    const [dataYKKrd, setDataYKKrd] = useState<Gangguan[]>([]);
+    const [dataSLO, setDataSLO] = useState<Gangguan[]>([]);
 
     const [selectedSource, setSelectedSource] = useState<string>('All');
 
@@ -28,23 +32,30 @@ export default function Page() {
             try {
                 setError(null);
 
-                const [res1, res2] = await Promise.all([
-                    fetch(`/api/gangguan?range=${encodeURIComponent(range1)}&type=KDK`),
-                    fetch(`/api/gangguan?range=${encodeURIComponent(range2)}&type=KDK`)
+                const [resYKLok, resYKKrd, resSLO] = await Promise.all([
+                    fetch(`/api/gangguan?range=${encodeURIComponent(rangeYKLok)}&type=KDT`),
+                    fetch(`/api/gangguan?range=${encodeURIComponent(rangeYKKrd)}&type=KDG`),
+                    fetch(`/api/gangguan?range=${encodeURIComponent(rangeSLO)}&type=KDT`),
                 ]);
 
-                if (!res1.ok || !res2.ok) throw new Error("Failed to fetch one or both datasets");
+                if (!resYKLok.ok || !resYKKrd.ok || !resSLO.ok) throw new Error("Failed to fetch one or both datasets");
 
 
-                const [data1, data2]: [Gangguan[], Gangguan[]] = await Promise.all([
-                    res1.json(),
-                    res2.json()
+                const [dataYKLok, dataYKKrd, dataSLO]: [Gangguan[], Gangguan[], Gangguan[]] = await Promise.all([
+                    resYKLok.json(),
+                    resYKKrd.json(),
+                    resSLO.json()
                 ]);
 
-                setData1(data1);
-                setData2(data2);
+                setDataYKLok(dataYKLok);
+                const dataKRD = gangguanKDGToKDT(dataYKKrd);
+                setDataYKKrd(dataKRD);
+                setDataSLO(dataSLO);
 
-                const tempMergedData = mergeGangguan(data1, data2);
+                const tempMergeYK = mergeGangguan(dataYKLok, dataKRD)
+                setDataYK(tempMergeYK);
+
+                const tempMergedData = mergeGangguan(tempMergeYK, dataSLO);
                 setMergeData(tempMergedData);
 
             } catch (err) {
@@ -59,21 +70,26 @@ export default function Page() {
         }
 
         fetchData();
-    }, [range1, range2]);
+    }, [rangeYKLok, rangeYKKrd, rangeSLO]);
 
     if (error) return <p>Error: {error}</p>;
 
-    const data =
-        selectedSource === "KDK SLO"
-            ? data1
-            : selectedSource === "KDK YK"
-                ? data2
-                : mergedData
+    const dataMap = {
+        "KDT SLO": dataSLO,
+        "KDT YK": dataYK,
+        "KDT YK LOK": dataYKLok,
+        "KDT YK KRD": dataYKKrd,
+        "All": mergedData
+    } as const;
+
+    type SourceKey = keyof typeof dataMap;
+
+    const data = dataMap[selectedSource as SourceKey] || mergedData;
 
     return (
         <>
             <main className="w-full flex flex-col gap-4">
-                <h1 className="font-bold text-2xl">Gangguan KDK</h1>
+                <h1 className="font-bold text-2xl">Gangguan KDT</h1>
                 <div className="flex flex-col gap-2">
                     <h1 className="font-medium text-md">Pilih data:</h1>
                     <Select
@@ -87,8 +103,10 @@ export default function Page() {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="All">Gabungan</SelectItem>
-                            <SelectItem value="KDK YK">KDK YK</SelectItem>
-                            <SelectItem value="KDK SLO">KDK SLO</SelectItem>
+                            <SelectItem value="KDT YK">KDT YK</SelectItem>
+                            <SelectItem value="KDT YK LOK">KDT YK LOK</SelectItem>
+                            <SelectItem value="KDT YK KRD">KDT YK KRD</SelectItem>
+                            <SelectItem value="KDT SLO">KDT SLO</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -99,8 +117,8 @@ export default function Page() {
                     </div>
                 ) : (
                     <div className="flex flex-col w-full gap-4">
-                        <GangguanChart data={data} variant="KDK" />
-                        <GangguanTable data={data} variant="KDK" />
+                        <GangguanChart data={data} variant="KDT" />
+                        <GangguanTable data={data} variant="KDT" />
                     </div>
                 )}
             </main>
