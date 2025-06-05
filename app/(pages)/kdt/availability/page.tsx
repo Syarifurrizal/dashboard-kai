@@ -14,12 +14,16 @@ import { calculateAvailabilityPercentages, mergeAndRecalculatesAvailability } fr
 
 export default function Page() {
 
-    const range1 = "AVAILABILITY KDK SLO!S3:AC14";
-    const range2 = "AVAILABILITY KDK YK!S3:AC14";
+    const rangeYKLok = "AVAILABILITY LOK KDT YK!AD3:AN14";
+    const rangeYKKrd = " AVAILABILITY KRD KDT YK!AC3:AM14";
+    const rangeSLO = "AVAILABILITY KDT SLO!T3:AD14";
 
     const [mergedData, setMergeData] = useState<Availability[]>([]);
-    const [data1, setData1] = useState<Availability[]>([]);
-    const [data2, setData2] = useState<Availability[]>([]);
+    const [mergedDataYK, setMergeDataYK] = useState<Availability[]>([]);
+
+    const [dataYKLok, setDataYKLok] = useState<Availability[]>([]);
+    const [dataYKKrd, setDataYKKrd] = useState<Availability[]>([]);
+    const [dataSLO, setDataSLO] = useState<Availability[]>([]);
 
     const [selectedSource, setSelectedSource] = useState<string>('All');
 
@@ -32,22 +36,28 @@ export default function Page() {
             try {
                 setError(null);
 
-                const [res1, res2] = await Promise.all([
-                    fetch(`/api/availability?range=${encodeURIComponent(range1)}`),
-                    fetch(`/api/availability?range=${encodeURIComponent(range2)}`)
+                const [res1, res2, res3] = await Promise.all([
+                    fetch(`/api/availability?range=${encodeURIComponent(rangeYKLok)}`),
+                    fetch(`/api/availability?range=${encodeURIComponent(rangeYKKrd)}`),
+                    fetch(`/api/availability?range=${encodeURIComponent(rangeSLO)}`)
                 ]);
 
-                if (!res1.ok || !res2.ok) throw new Error("Failed to fetch one or both datasets");
+                if (!res1.ok || !res2.ok || res3.ok) throw new Error("Failed to fetch one or both datasets");
 
-                const [data1, data2]: [Availability[], Availability[]] = await Promise.all([
+                const [dataResYKLok, dataResYKKrd, dataResSLO]: [Availability[], Availability[], Availability[]] = await Promise.all([
                     res1.json(),
-                    res2.json()
+                    res2.json(),
+                    res3.json(),
                 ]);
 
-                setData1(calculateAvailabilityPercentages(data1));
-                setData2(calculateAvailabilityPercentages(data2));
+                setDataYKLok(calculateAvailabilityPercentages(dataResYKLok));
+                setDataYKKrd(calculateAvailabilityPercentages(dataResYKKrd));
+                setDataSLO(calculateAvailabilityPercentages(dataResSLO));
 
-                const tempMergedData = mergeAndRecalculatesAvailability(data1, data2);
+                const tempMergedDataYK = mergeAndRecalculatesAvailability(dataResYKLok, dataResYKKrd);
+                setMergeDataYK(calculateAvailabilityPercentages(tempMergedDataYK));
+
+                const tempMergedData = mergeAndRecalculatesAvailability(tempMergedDataYK, dataResSLO);
                 setMergeData(tempMergedData);
             } catch (err) {
                 if (err instanceof Error) {
@@ -61,24 +71,28 @@ export default function Page() {
         }
 
         fetchData();
-    }, [range1, range2]);
+    }, [rangeYKLok, rangeYKKrd, rangeSLO]);
 
 
     if (error) return <p>Error: {error}</p>;
 
-    const data =
-        selectedSource === "KDK SLO"
-            ? data1
-            : selectedSource === "KDK YK"
-                ? data2
-                : mergedData
+    const dataMap = {
+        "KDT SLO": dataSLO,
+        "KDT YK": mergedDataYK,
+        "KDT YK LOK": dataYKLok,
+        "KDT YK KRD": dataYKKrd,
+        "All": mergedData
+    } as const;
 
+    type SourceKey = keyof typeof dataMap;
+
+    const data = dataMap[selectedSource as SourceKey] || mergedData;
 
     return (
 
         <>
             <main className="w-full flex flex-col gap-4">
-                <h1 className="font-bold text-2xl">Availability KDK</h1>
+                <h1 className="font-bold text-2xl">Availability KDT</h1>
                 <div className="flex flex-col gap-2">
                     <h1 className="font-medium text-md">Pilih data:</h1>
                     <Select
@@ -92,8 +106,10 @@ export default function Page() {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="All">Gabungan</SelectItem>
-                            <SelectItem value="KDK YK">KDK YK</SelectItem>
-                            <SelectItem value="KDK SLO">KDK SLO</SelectItem>
+                            <SelectItem value="KDT YK">KDT YK</SelectItem>
+                            <SelectItem value="KDT YK LOK">KDT YK LOK</SelectItem>
+                            <SelectItem value="KDT YK KRD">KDT YK KRD</SelectItem>
+                            <SelectItem value="KDT SLO">KDT SLO</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>

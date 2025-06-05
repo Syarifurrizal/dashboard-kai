@@ -1,3 +1,9 @@
+export interface Armada {
+    jenisKereta: string;
+    depo: string;
+    jumlah: number;
+}
+
 export interface Availability {
     bulan: string;
     armada: number;
@@ -55,4 +61,12 @@ export interface SaldoGudang {
     tanggal: string;
     realDate: Date;
     saldo: number;
+}
+
+export interface Jabatan {
+    nipp: number;
+    nama: string;
+    posisi: string;
+    subgroup: string;
+    penempatan: string;
 }
