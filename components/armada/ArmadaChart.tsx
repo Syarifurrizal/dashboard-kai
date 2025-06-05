@@ -38,14 +38,20 @@ const chartConfig = {
 
 export default function ArmadaChart({ data }: Props) {
 
-    const grouped = new Map<string, Record<string, any>>();
+    interface GroupedEntry {
+        jenisKereta: string;
+        [depo: string]: string | number;
+    }
+
+    const grouped = new Map<string, GroupedEntry>();
 
     for (const item of data) {
         const key = item.jenisKereta;
-        const existing = grouped.get(key) ?? { jenisKereta: key };
-        existing[item.depo] = (existing[item.depo] ?? 0) + item.jumlah;
+        const existing = grouped.get(key) ?? { jenisKereta: key } as GroupedEntry;
+        existing[item.depo] = ((existing[item.depo] as number) ?? 0) + item.jumlah;
         grouped.set(key, existing);
     }
+
 
     // Convert Map to Array
     let chartData = Array.from(grouped.values());
@@ -53,7 +59,8 @@ export default function ArmadaChart({ data }: Props) {
     // Calculate total stack for each bar and add 'total' property
     chartData = chartData.map((entry) => {
         const total = Object.keys(chartConfig).reduce((sum, depo) => {
-            return sum + (entry[depo] ?? 0);
+            const value = entry[depo];
+            return sum + (typeof value === "number" ? value : 0);
         }, 0);
         return { ...entry, total };
     });
@@ -70,6 +77,7 @@ export default function ArmadaChart({ data }: Props) {
                     <BarChart accessibilityLayer data={chartData}>
                         <CartesianGrid vertical={false} />
                         <XAxis dataKey="jenisKereta" tickLine={false} axisLine={false} tickMargin={10} />
+                        <YAxis tickLine={false} axisLine={false} />
                         <ChartTooltip content={<ChartTooltipContent />} />
                         <ChartLegend content={<ChartLegendContent />} />
                         {depoList.map((depo, index) => (

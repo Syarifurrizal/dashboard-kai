@@ -62,3 +62,11 @@ export interface SaldoGudang {
     realDate: Date;
     saldo: number;
 }
+
+export interface Jabatan {
+    nipp: number;
+    nama: string;
+    posisi: string;
+    subgroup: string;
+    penempatan: string;
+}
