@@ -42,7 +42,7 @@ export default function Page() {
                     fetch(`/api/availability?range=${encodeURIComponent(rangeSLO)}`)
                 ]);
 
-                if (!res1.ok || !res2.ok || res3.ok) throw new Error("Failed to fetch one or both datasets");
+                if (!res1.ok || !res2.ok || !res3.ok) throw new Error("Failed to fetch one or both datasets");
 
                 const [dataResYKLok, dataResYKKrd, dataResSLO]: [Availability[], Availability[], Availability[]] = await Promise.all([
                     res1.json(),
