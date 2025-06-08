@@ -1,5 +1,6 @@
 "use client";
 
+import { JabatanChart } from "@/components/jabatan/JabatanChart";
 import JabatanChartSkeleton from "@/components/jabatan/JabatanChartSkeleton";
 import JabatanTable from "@/components/jabatan/JabatanTable";
 import JabatanTableSkeleton from "@/components/jabatan/JabatanTableSkeleton";
@@ -11,6 +12,7 @@ export default function Page() {
     const rangePusat = "DAFNOM_FEB!A2:E9";
     const rangeKaryawan = "DAFNOM_FEB!A12:E";
 
+    const [dataCombine, setDataCombine] = useState<Jabatan[]>([]);
     const [dataPusat, setDataPusat] = useState<Jabatan[]>([]);
     const [dataKaryawan, setDataKaryawan] = useState<Jabatan[]>([]);
 
@@ -37,6 +39,7 @@ export default function Page() {
 
                 setDataPusat(dataResPusat);
                 setDataKaryawan(dataResKaryawan);
+                setDataCombine([...dataResPusat, ...dataResKaryawan]);
 
             } catch (err) {
                 if (err instanceof Error) {
@@ -68,7 +71,7 @@ export default function Page() {
                     </div>
                 ) : (
                     <div className="flex flex-col w-full gap-4">
-                        {/* <ArmadaChart data={data} /> */}
+                        <JabatanChart chartData={dataCombine} />
                         <JabatanTable title={"Jabatan Pusat"} data={dataPusat} />
                         <JabatanTable title={"Jabatan Lapangan"} data={dataKaryawan} />
                     </div>
