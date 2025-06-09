@@ -80,8 +80,9 @@ export function JabatanChart({
 
     const chartConfig = React.useMemo(
         () => generateDynamicChartConfig(uniquePenempatans),
-        [chartData]
+        [chartData, uniquePenempatans]
     )
+
 
     const newChartData = React.useMemo(
         () => countPenempatanToArray(chartData, chartConfig),
