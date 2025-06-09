@@ -6,7 +6,10 @@ export async function fetchJabatan(range: string): Promise<Jabatan[]> {
     const rows = await fetchSheetData({ range: range });
 
     return rows
-        .filter(row => row[0] != null)
+        .filter(row => {
+            const value = String(row[0] ?? "").trim().toLowerCase();
+            return value !== "" && value !== "nipp";
+        })
         .map((row) => {
             return {
                 nipp: toInt(row[0]),
