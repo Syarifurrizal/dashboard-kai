@@ -19,6 +19,9 @@ export default function Page() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
+    const [activePenempatan, setActivePenempatan] = useState("all");
+
+
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
@@ -71,9 +74,25 @@ export default function Page() {
                     </div>
                 ) : (
                     <div className="flex flex-col w-full gap-4">
-                        <JabatanChart chartData={dataCombine} />
-                        <JabatanTable title={"Jabatan Pusat"} data={dataPusat} />
-                        <JabatanTable title={"Jabatan Lapangan"} data={dataKaryawan} />
+                        <JabatanChart
+                            chartData={dataCombine}
+                            activePenempatan={activePenempatan}
+                            setActivePenempatan={setActivePenempatan}
+                        />
+                        {activePenempatan === "all" ? (
+                            <>
+                                <JabatanTable title={"Jabatan Pusat"} data={dataPusat} />
+                                <JabatanTable title={"Jabatan Lapangan"} data={dataKaryawan} />
+                            </>
+                        ) : (
+                            <>
+                                <JabatanTable
+                                    title={`Jabatan ${activePenempatan}`}
+                                    data={dataCombine.filter(j => j.penempatan === activePenempatan)}
+                                />
+                            </>
+                        )}
+
                     </div>
                 )}
             </main>
