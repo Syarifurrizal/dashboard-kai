@@ -1,4 +1,4 @@
-import { Cell, Pie, PieChart } from "recharts";
+import { Cell, LabelList, Pie, PieChart } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
 import { Availability } from "@/lib/definitions";
@@ -82,25 +82,26 @@ export default function DistribusiChart({ label, chartKey, chartData }: Props) {
                         className="mx-auto aspect-square"
                     >
                         <PieChart>
-                            <ChartTooltip
-                                cursor={false}
-                                content={<ChartTooltipContent hideLabel />}
-                            />
+                            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+
                             <Pie
-                                data={data}
+                                data={data.filter(entry => entry.value !== 0)}
                                 dataKey="value"
                                 nameKey="bulan"
-                                innerRadius={40}
+                                labelLine={false}
                             >
-                                {data.map((entry) => {
-                                    const color = chartConfig[entry.bulan as keyof typeof chartConfig]?.color ?? "#8884d8";
-                                    return <Cell key={entry.bulan} fill={color} />;
-                                })}
+                                <LabelList dataKey="value" position="inside" fill="#fff" fontSize={10} fontWeight={20} />
+                                {
+                                    data.map((entry) => {
+                                        const color = chartConfig[entry.bulan as keyof typeof chartConfig]?.color ?? "#8884d8";
+                                        return <Cell key={entry.bulan} fill={color} />;
+                                    })
+                                }
                             </Pie>
                         </PieChart>
                     </ChartContainer>
                 </CardContent>
-            </Card>
+            </Card >
         </>
     );
 }
