@@ -72,8 +72,9 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarGroupLabel>Armada</SidebarGroupLabel>
-              <AppSidebarContent title="Sarana" url="/armada" icon={TrainIcon} />
+              <SidebarGroupLabel>Sarana</SidebarGroupLabel>
+              <AppSidebarContent title="Armada" url="/armada" icon={TrainIcon} />
+              <AppSidebarContent title="ATPS" url="/atps" icon={BadgeDollarSign} />
 
               <div className="flex items-center gap-2 pt-2">
                 <SidebarGroupLabel>Sarana</SidebarGroupLabel>
